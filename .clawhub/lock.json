@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "skills": {
+    "playwright-mcp": {
+      "version": "1.0.0",
+      "installedAt": 1772002758093
+    },
+    "passwords": {
+      "version": "1.1.0",
+      "installedAt": 1772783294669
+    },
+    "bitwarden": {
+      "version": "1.0.0",
+      "installedAt": 1772783318121
+    },
+    "agent-orchestrator": {
+      "version": "0.1.0",
+      "installedAt": 1772817604106
+    },
+    "agent-autopilot": {
+      "version": "1.4.1",
+      "installedAt": 1772817612033
+    },
+    "task-orchestra": {
+      "version": "1.0.0",
+      "installedAt": 1772817664455
+    },
+    "agent-autonomy": {
+      "version": "1.0.0",
+      "installedAt": 1772817807284
+    },
+    "openclaw-mission-control": {
+      "version": "1.0.0",
+      "installedAt": 1772819052016
+    },
+    "project-manager": {
+      "version": "1.0.0",
+      "installedAt": 1772819189944
+    },
+    "obsidian-cli-official": {
+      "version": "4.0.2",
+      "installedAt": 1772821151248
+    },
+    "graphiti": {
+      "version": "1.0.1",
+      "installedAt": 1772821224283
+    }
+  }
+}

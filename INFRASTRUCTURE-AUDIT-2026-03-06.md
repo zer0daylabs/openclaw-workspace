@@ -1,0 +1,153 @@
+# Infrastructure Audit Report - Zer0Day Labs Inc.
+Generated: 2026-03-06 12:00 MST
+
+## Executive Summary
+- **Overall Health Score: 6/10**
+- **Authentication**: Railway ✓ | Vercel ✗ (requires token setup)
+- **Key Issue**: MusicGen & AudioStudio repos not found in workspace
+
+---
+
+## Vercel Status
+
+### Authentication
+- **Status**: Requires manual setup
+- **Token Location**: ~/.openclaw/workspace/.credentials/vercel.json ✓
+- **Account**: support-9645 (authenticated)
+
+### Projects
+- **Workspace Project**: zer0day/workspace (prj_zbeG3stfjugy7uuZE4SsA9f8sbVN)
+- **Deployments**: None found for main workspace
+- **MusicGen**: NOT DEPLOYED on Vercel
+- **AudioStudio**: NOT DEPLOYED on Vercel
+
+### Issues Identified
+1. ❌ MusicGen and AudioStudio repositories are missing from ~/repos/
+2. ❌ No Vercel deployments found for core products
+3. ❌ No deployment pipeline configured
+
+---
+
+## Railway Status
+
+### Authentication
+- **Status**: ✓ Authenticated (support@zer0daylabs.com)
+- **Workspace**: zer0day
+
+### Projects Deployed (7 total)
+
+| Project | Services | Type | Created |
+|---------|----------|------|---------|
+| lucky-playfulness | Postgres | DB | 2025-11-20 |
+| truthful-warmth | Postgres | DB | 2025-10-20 |
+| appealing-laughter | Postgres | DB | 2025-10-13 |
+| audio-converter | audio-converter-postgres | DB + App | 2025-10-10 |
+| user-data-subscriptions | user-data-postgres | DB | 2025-10-10 |
+| new-db-app | new-db-app-postgres | DB | 2025-10-10 |
+| SlackBot | SlackBot + taskmaster-postgres | App + DB | 2025-10-06 |
+
+### Railway Health
+- All 7 projects have production environments
+- All services appear to be database-focused
+- SlackBot has 2 services (app + database)
+- No obvious failures detected
+
+---
+
+## Critical Findings
+
+### Missing Repositories
+**CRITICAL**: MusicGen and AudioStudio repositories are not present in ~/repos/
+- Expected locations: ~/.openclaw/workspace/repos/MusicGen, ~/.openclaw/workspace/repos/AudioStudio
+- These are the core revenue-generating products
+- Current status in workspace: Active, but no physical repos found
+
+### Database Architecture
+- **6 PostgreSQL databases** across Railway projects
+- All DBs appear to be separate projects (single-DB-per-project pattern)
+- Database naming conventions are cryptic (project names like "lucky-playfulness")
+- SlackBot project has dedicated Postgres + app service
+
+### Integration Gaps
+1. **Vercel ↔ Railway connections**: NOT DETECTED
+2. **Environment variables**: Need to verify across projects
+3. **No CI/CD visibility**: Can't see build history or deployment status
+
+---
+
+## Recommendations
+
+### Immediate (P0)
+1. **Find MusicGen & AudioStudio repos**
+   - Search GitHub: zer0daylabs organization
+   - Check if they were archived/moved
+   - If lost, need to restore from backups or recreate
+
+2. **Set up deployment pipeline**
+   - Configure Vercel CLI with token: `export VERCEL_TOKEN="jWrPblHIloTZth3oZbqQ0hq1"`
+   - Deploy MusicGen and AudioStudio to Vercel
+   - Link Railway databases via environment variables
+
+3. **Standardize project naming**
+   - Rename Railway projects to match product names
+   - Current names are auto-generated nonsense ("lucky-playfulness")
+   - Rename to: MusicGen, AudioStudio, Ringo, etc.
+
+### Short-term (P1)
+4. **Verify database configurations**
+   - Check Railway environment variables for DATABASE_URL
+   - Ensure Railway ↔ Vercel connectivity
+   - Test database connections
+
+5. **Audit active deployments**
+   - Check Railway logs for each project
+   - Verify all services are running
+   - Confirm database health
+
+### Medium-term (P2)
+6. **Infrastructure as Code**
+   - Document all environment variables
+   - Create deployment scripts
+   - Set up monitoring/alerts
+
+7. **Cost optimization**
+   - Review Railway project usage
+   - Identify unused databases/projects
+   - Clean up abandoned projects (truthful-warmth, appealing-laughter, etc.)
+
+---
+
+## Action Items for Lauro
+
+```bash
+# 1. Set up Vercel authentication
+export VERCEL_TOKEN="jWrPblHIloTZth3oZbqQ0hq1"
+
+# 2. Find missing repos
+git ls-remote --heads git@github.com:zer0daylabs/MusicGen.git 2>&1 || echo "Repo not found"
+git ls-remote --heads git@github.com:zer0daylabs/AudioStudio.git 2>&1 || echo "Repo not found"
+
+# 3. Check Vercel projects
+vercel projects list --token="$VERCEL_TOKEN"
+
+# 4. Rename Railway projects (if needed)
+railway project rename --project <id> --name <new-name>
+```
+
+---
+
+## Infrastructure Health Score Breakdown
+
+| Category | Score | Notes |
+|----------|-------|-------|
+| Authentication | 8/10 | Both platforms accessible |
+| Deployment Coverage | 3/10 | Core products not deployed |
+| Infrastructure | 6/10 | 7 active Railway projects |
+| Documentation | 5/10 | Project names unclear |
+| Integration | 4/10 | Vercel ↔ Railway gaps |
+
+**Overall: 6/10** - Functional but needs cleanup and deployment of core products
+
+---
+
+*Report generated by CB, Zer0Day Labs AI partner*

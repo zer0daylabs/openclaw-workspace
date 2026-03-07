@@ -1,0 +1,34 @@
+.vercel
+
+# Environment and credentials
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+**/.credentials/
+**/.vault/
+
+# Local dev files
+node_modules/
+*.log
+.DS_Store
+*.tmp
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Embedded git repos (should be submodules)
+eventvikings-predictive-dialer/eventvikings
+ext/openclaw-graphiti
+repos/
+
+# Crypto trading docs
+crypto-trading-*.md
+
+# Build artifacts
+repos/Ringo/.next/
+repos/Ringo/.env

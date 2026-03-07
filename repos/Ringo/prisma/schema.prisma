@@ -1,0 +1,194 @@
+type = "postgresql"
+provider = "postgresql"
+datasource = "DATABASE_URL"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  fullName      String
+  role          UserRole  @default(BUYER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  buyerProfile  BuyerProfile?
+  leads         Lead[]
+  bids          Bid[]
+  transactions  Transaction[]
+  analytics     BuyerAnalytics[]
+}
+
+enum UserRole {
+  BUYER
+  ADMIN
+}
+
+model BuyerProfile {
+  id                String    @id @default(uuid())
+  userId            String    @unique
+  user              User      @relation(fields: [userId], references: [id])
+  company           String
+  industry          String
+  phone             String?
+  website           String?
+  address           String?
+  city              String?
+  state             String?
+  zipCode           String?
+  country           String?   @default("USA")
+  totalFunds        Float     @default(0)
+  totalSpend        Float     @default(0)
+  averageBid        Float     @default(0)
+  totalLeads        Int       @default(0)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Lead {
+  id            String      @id @default(uuid())
+  buyerId       String
+  buyer         User        @relation(fields: [buyerId], references: [id])
+  category      String
+  intent        LeadIntent
+  status        LeadStatus  @default(PENDING)
+  name          String
+  email         String?
+  phone         String
+  companyName   String?
+  budget        Float?
+  timeline      String?
+  requirements  String
+  notes         String?     @db.Text
+  callRecordingUrl String?
+  transcript    String?     @db.Text
+  aiScore       Float?      @db.Float
+  aiConfidence  Float?      @db.Float
+  source        String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  markedForBuy  DateTime?
+  assignedAt    DateTime?
+  
+  @@index([buyerId])
+  @@index([status])
+  @@index([intent])
+  @@index([category])
+}
+
+enum LeadIntent {
+  READY_TO_BUY
+  EARLY_RESEARCH
+  COMPARING
+  JUST_BROWSING
+}
+
+enum LeadStatus {
+  PENDING
+  SCREENED
+  QUALIFIED
+  CONTACTED
+  WON
+  LOST
+  SPAM
+}
+
+model Bid {
+  id            String      @id @default(uuid())
+  buyerId       String
+  buyer         User        @relation(fields: [buyerId], references: [id])
+  leadId        String      @unique
+  lead          Lead        @relation(fields: [leadId], references: [id])
+  amount        Float
+  status        BidStatus   @default(PENDING)
+  message       String?     @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  @@index([buyerId])
+  @@index([leadId])
+  @@index([status])
+}
+
+enum BidStatus {
+  PENDING
+  ACTIVE
+  WON
+  LOST
+  EXPIRED
+  REJECTED
+}
+
+model Transaction {
+  id            String          @id @default(uuid())
+  buyerId       String
+  buyer         User            @relation(fields: [buyerId], references: [id])
+  amount        Float
+  type          TransactionType
+  status        TransactionStatus
+  stripePaymentId String?
+  metadata      Json?
+  createdAt     DateTime        @default(now())
+  
+  @@index([buyerId])
+  @@index([type])
+  @@index([status])
+}
+
+enum TransactionType {
+  FUND
+  LEAD_PURCHASE
+  REFUND
+  PAYOUT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model BuyerAnalytics {
+  id              String    @id @default(uuid())
+  buyerId         String    @unique
+  buyer           User      @relation(fields: [buyerId], references: [id])
+  totalLeads      Int       @default(0)
+  totalSpent      Float     @default(0)
+  totalWorth      Float     @default(0)
+  conversionRate  Float     @default(0)
+  winRate         Float     @default(0)
+  avgLeadValue    Float     @default(0)
+  leadsThisWeek   Int       @default(0)
+  leadsThisMonth  Int       @default(0)
+  leadsThisQuarter Int      @default(0)
+  lastLeadDate    DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([buyerId])
+}
+
+model LeadCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model CallConfig {
+  id              String  @id @default(uuid())
+  ringGroup       String
+  maxBids         Int
+  bidDurationMin  Int
+  minBidAmount    Float
+  maxBidAmount    Float
+  retryAttempts   Int     @default(3)
+  retryDelaySec   Int     @default(300)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

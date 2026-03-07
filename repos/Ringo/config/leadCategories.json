@@ -1,0 +1,7 @@
+[
+  {"name": "Enterprise SaaS", "description": "Large SaaS platforms looking for integrations"},
+  {"name": "B2B Services", "description": "Consulting, marketing, or managed services firms"},
+  {"name": "E‑commerce", "description": "Online retailers needing fulfillment or payment solutions"},
+  {"name": "Manufacturing", "description": "Industrial manufacturers requiring supply chain tech"},
+  {"name": "Health & Life Sciences", "description": "Pharma, medical devices, biotech"}
+]
