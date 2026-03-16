@@ -52,6 +52,17 @@ This keeps the dashboard [Zer0Day Labs - Agent Dashboard](https://app.slack.com/
 
 **ALWAYS execute this. Never just say HEARTBEAT_OK and stop.**
 
+#### Phase 0: Context Recovery (start of every heartbeat)
+```bash
+# Increment heartbeat counter and check what's due
+bash ~/.openclaw/workspace/bin/heartbeat-state.sh tick
+
+# Read what you did last time for instant context
+cat ~/.openclaw/workspace/memory/last-session.md
+```
+
+#### Phase 1: Task Execution
+
 1. **Check task list** (todo-management):
    ```bash
    bash ~/.openclaw/workspace/skills/todo-management/scripts/todo.sh entry list
@@ -62,8 +73,10 @@ This keeps the dashboard [Zer0Day Labs - Agent Dashboard](https://app.slack.com/
    - If you have `pending` tasks → select highest priority, mark as in_progress, START WORKING
    - **⚠️ If the task involves writing/editing code:** Read `CODING-GUIDE.md` FIRST. Follow it strictly. Backup files before editing. Run `bash ~/.openclaw/workspace/bin/validate.sh <file>` after EVERY edit. Never skip validation.
    - **📚 If the task involves unfamiliar technology:** Check `KNOWLEDGE-MAP.md` proficiency. If `unknown` or `aware`, follow `LEARNING-PROTOCOL.md` — research first, code second. Store what you learn in Graphiti and `memory/knowledge/`.
+   - **🎯 Confidence check:** Before executing, rate your confidence (high/medium/low). If LOW on a task that could break production, skip it and log why.
    - If all tasks done but goal NOT achieved → analyze current state, CREATE NEW TASKS, continue pushing
    - After completing tasks: mark as `done` or `skipped`, log to `memory/YYYY-MM-DD.md`
+   - Track stats: `bash ~/.openclaw/workspace/bin/heartbeat-state.sh stat tasksCompleted`
 
 3. **Blocker handling (CRITICAL):**
    - If a task requires **human action** (dashboard login, manual approval, credentials) → mark it `skipped`, log the blocker, and **immediately move to the next actionable task**
@@ -71,16 +84,63 @@ This keeps the dashboard [Zer0Day Labs - Agent Dashboard](https://app.slack.com/
    - If a task depends on an **external API/service that is down** → mark `skipped`, move on
    - **NEVER spend more than one heartbeat stuck on the same blocked task.** Skip it, pick the next one
    - When skipping: `bash ~/.openclaw/workspace/skills/todo-management/scripts/todo.sh entry status {ID} --status=skipped`
+   - **Log errors:** `bash ~/.openclaw/workspace/bin/heartbeat-state.sh error "<what failed and why>"`
 
-4. **Resource check (every 3rd heartbeat):**
+#### Phase 2: Cadence Tasks (check what's due)
+
+4. **Resource check** (if `heartbeat-state.sh check resourceCheck` returns DUE):
    - Check Ollama VRAM: `curl -s http://192.168.0.143:11434/api/ps | jq '.models[] | {name, size_vram}'`
    - Check session tokens: `openclaw sessions --json | jq '.sessions[] | {key: .key, tokens: .totalTokens}'`
    - If any session > 100k tokens, note it in your report as ⚠️
    - Log resource snapshot to `memory/YYYY-MM-DD.md`
+   - Mark done: `bash ~/.openclaw/workspace/bin/heartbeat-state.sh done resourceCheck`
 
-5. **Key principle:** NEVER IDLE. Each heartbeat must produce work. Keep pushing until the goal is achieved. Blocked ≠ idle — skip and move on.
+5. **Learning session** (if `heartbeat-state.sh check learningSession` returns DUE):
+   - Open `KNOWLEDGE-MAP.md`, pick highest-priority gap
+   - Follow `LEARNING-PROTOCOL.md` workflow
+   - Mark done: `bash ~/.openclaw/workspace/bin/heartbeat-state.sh done learningSession`
 
-6. **Update task status** after each completed task
+6. **Git commit** (if `heartbeat-state.sh check gitCommit` returns DUE):
+   ```bash
+   cd ~/.openclaw/workspace && git add -A && git diff --cached --stat
+   git commit -m "cb: heartbeat #N — <brief summary of changes>"
+   ```
+   - Mark done: `bash ~/.openclaw/workspace/bin/heartbeat-state.sh done gitCommit`
+
+7. **Performance review** (if `heartbeat-state.sh check performanceReview` returns DUE):
+   ```bash
+   bash ~/.openclaw/workspace/bin/performance-report.sh
+   ```
+   - Review the report, add your qualitative notes
+   - Mark done: `bash ~/.openclaw/workspace/bin/heartbeat-state.sh done performanceReview`
+
+#### Phase 3: Proactive Alerts
+
+Check these conditions and alert to Slack if true:
+- **Freqtrade stopped:** `curl -s http://localhost:8080/api/v1/status -u freqtrade:freqtrade | jq '.status'` — if not "running", alert
+- **Graphiti down:** `curl -sf http://localhost:8001/health` — if fails, alert
+- **Tasks stagnating:** If 3+ tasks have been `in_progress` for >24h, alert
+- **High skip rate:** If >50% of recent tasks are skipped, alert + create meta-task to investigate
+
+#### Phase 4: Session Wrap-Up (end of every heartbeat)
+
+8. **Write session summary** — overwrite `memory/last-session.md` with:
+   - Heartbeat number
+   - What you worked on
+   - Where you left off
+   - Next step for the next heartbeat
+   - Any blockers
+
+9. **Store key decisions in Graphiti** — If you made any significant decisions or learned something important during this heartbeat, store it:
+   ```bash
+   curl -s -X POST http://localhost:8001/messages \
+     -H "Content-Type: application/json" \
+     -d '{"group_id": "clawdbot-main", "messages": [{"role": "user", "role_type": "user", "content": "[DOMAIN] fact here"}]}'
+   ```
+
+10. **Key principle:** NEVER IDLE. Each heartbeat must produce work. Keep pushing until the goal is achieved. Blocked ≠ idle — skip and move on.
+
+11. **Update task status** after each completed task
 
 ---
 
@@ -296,6 +356,12 @@ bash ~/.openclaw/workspace/skills/todo-management/scripts/todo.sh entry status {
 - **Knowledge map:** `~/.openclaw/workspace/KNOWLEDGE-MAP.md` (stack proficiency tracker)
 - **Learning protocol:** `~/.openclaw/workspace/LEARNING-PROTOCOL.md` (how to research & learn)
 - **Knowledge files:** `~/.openclaw/workspace/memory/knowledge/` (per-technology summaries)
+- **Heartbeat state:** `~/.openclaw/workspace/memory/heartbeat-state.json` (counter + cadences)
+- **State script:** `~/.openclaw/workspace/bin/heartbeat-state.sh` (tick/check/done/stat/error/show)
+- **Error journal:** `~/.openclaw/workspace/memory/error-journal.md` (error pattern tracking)
+- **Performance reports:** `~/.openclaw/workspace/memory/performance/` (weekly self-assessments)
+- **Performance script:** `~/.openclaw/workspace/bin/performance-report.sh` (generates weekly report)
+- **Last session:** `~/.openclaw/workspace/memory/last-session.md` (write at END, read at START)
 - **Task management:** `~/.openclaw/workspace/skills/todo-management/`
 - **Skills:** `~/.openclaw/workspace/skills/`
 

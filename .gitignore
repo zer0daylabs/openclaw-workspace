@@ -29,6 +29,16 @@ repos/
 # Crypto trading docs
 crypto-trading-*.md
 
+# Binary data files
+*.feather
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.pkl
+*.pyc
+__pycache__/
+*.zip
+
 # Build artifacts
 repos/Ringo/.next/
 repos/Ringo/.env
