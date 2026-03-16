@@ -1,0 +1,36 @@
+{
+  "strategy_name": "RsiMacD",
+  "params": {
+    "max_open_trades": {
+      "max_open_trades": 10
+    },
+    "buy": {
+      "buy_adx_threshold": 22,
+      "buy_entry_type": "ema_cross",
+      "buy_require_trend": true,
+      "buy_rsi_max": 54,
+      "buy_volume_mult": 0.6
+    },
+    "sell": {
+      "sell_force_exit_hours": 4,
+      "sell_profit_protect": 0.004
+    },
+    "roi": {
+      "0": 0.133,
+      "19": 0.044,
+      "37": 0.031,
+      "115": 0
+    },
+    "stoploss": {
+      "stoploss": -0.288
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.111,
+      "trailing_stop_positive_offset": 0.167,
+      "trailing_only_offset_is_reached": true
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-03-12 02:22:07.519623+00:00"
+}

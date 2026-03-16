@@ -7,8 +7,8 @@ GRAPHITI_URL=$(clawdbot config get skills.graphiti.baseUrl 2>/dev/null || echo "
 # Fallback to environment variable
 GRAPHITI_URL=${GRAPHITI_URL:-"http://localhost:8001"}
 
-# Verify service is reachable
-if curl -sf "$GRAPHITI_URL/health" > /dev/null 2>&1; then
+# Verify service is reachable via /healthcheck
+if curl -sf "$GRAPHITI_URL/healthcheck" > /dev/null 2>&1; then
     echo "$GRAPHITI_URL"
     exit 0
 else

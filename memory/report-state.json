@@ -1,11 +1,16 @@
 {
-  "lastReportTime": 1741301600,
-  "lastReportDate": "2026-03-06",
-  "lastMemoryReview": 1741301600,
+  "lastReportTime": 1773680940,
+  "lastReportDate": "2026-03-15",
+  "lastMemoryReview": 1773764140,
   "lastHeartbeatChecks": {
     "email": null,
     "calendar": null,
-    "network": 1741295940,
-    "git-status": 1741295600
-  }
+    "network": 1773680940,
+    "git-status": 1773680940,
+    "cost-review": 1773680940,
+    "graphiti": 1773680940
+  },
+  "lastHeartbeat": 1773680940,
+  "nextReportDate": "2026-03-15",
+  "morningBriefingScheduled": true
 }

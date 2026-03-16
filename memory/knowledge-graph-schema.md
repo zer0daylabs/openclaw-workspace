@@ -2,32 +2,36 @@
 
 ## Current Status
 
-**Graphiti Tool Status**: Currently non-functional (API integration issues)
+**Graphiti Service**: ✅ OPERATIONAL at http://localhost:8001  
+**Tool Integration**: Fixed - endpoints corrected  
+**Ready for Import**: Yes
 
-**Workaround**: This guide documents exact commands for when the tool is fixed, plus manual node creation scripts.
-
-## Immediate Actions Required
-
-### When Graphiti Tool Becomes Operational
-
-Once the Graphiti tool is fixed, execute the following commands to populate the knowledge graph:
-
-## Node Addition Commands
+## API Commands for Node Addition
 
 ### 1. Core System Nodes
 
+#### OpenClaw
 ```bash
-# OpenClaw - Main AI agent framework
-graphiti_store(
-    fact="OpenClaw is an advanced AI agent framework for autonomous task execution, multi-agent coordination, and continuous self-improvement. It supports skills-based modularity, persistent memory across sessions, and extensive tool integration including GitHub, Slack, and browser automation. Working directory: ~/.openclaw/workspace",
-    speaker="CB-Agent"
-)
+GRAPHITI_URL="http://localhost:8001"
+curl -sf -X POST "$GRAPHITI_URL/messages" \
+  -H 'Content-Type: application/json' \
+  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "OpenClaw is an advanced AI agent framework for autonomous task execution, multi-agent coordination, and continuous self-improvement. It supports skills-based modularity, persistent memory across sessions, and extensive tool integration including GitHub, Slack, and browser automation. Working directory: ~/.openclaw/workspace"}]}'
+```
 
-# System Architecture node
-graphiti_store(
-    fact="OpenClaw workspace uses structured memory system: daily logs in memory/YYYY-MM-DD.md for raw session data, MEMORY.md for curated long-term wisdom, and skills/ for modular capabilities. Session context includes timestamp, channel, and task decomposition for sub-agents.",
-    speaker="CB-Agent"
-)
+#### System Architecture
+```bash
+GRAPHITI_URL="http://localhost:8001"
+curl -sf -X POST "$GRAPHITI_URL/messages" \
+  -H 'Content-Type: application/json' \
+  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "OpenClaw workspace uses structured memory system: daily logs in memory/YYYY-MM-DD.md for raw session data, MEMORY.md for curated long-term wisdom, and skills/ for modular capabilities. Session context includes timestamp, channel, and task decomposition for sub-agents."}]}'
+```
+
+#### Graphiti
+```bash
+GRAPHITI_URL="http://localhost:8001"
+curl -sf -X POST "$GRAPHITI_URL/messages" \
+  -H 'Content-Type: application/json' \
+  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "Graphiti is a temporal knowledge graph platform built on Neo4j and Qdrant for AI agent memory. Enables persistent fact storage, relationship mapping, and temporal reasoning about agent behavior, decisions, and learning. Reference: skills/graphiti/README.md"}]}'
 ```
 
 ### 2. Agent Architecture Nodes

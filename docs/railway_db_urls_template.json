@@ -1,0 +1,4 @@
+{
+  "MusicGen": "postgres://<user>:<password>@<host>:5432/<dbname>?sslmode=require",
+  "AudioStudio": "postgres://<user>:<password>@<host>:5432/<dbname>?sslmode=require"
+}

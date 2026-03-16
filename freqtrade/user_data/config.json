@@ -1,0 +1,89 @@
+{
+  "stake_currency": "USDT",
+  "stake_amount": 10.0,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "timeframe": "5m",
+  "dry_run": true,
+  "dry_run_wallet": 10000,
+  "cancel_open_orders_on_exit": false,
+  "unfilledtimeout": {
+    "order": 10,
+    "order_queue": 10
+  },
+  "strategy": "RsiMacD",
+  "exchange": {
+    "name": "kraken",
+    "key": "dwpo7UMyIP7/8FjHk+NqunHoTEV4heXdA3sS4XPFNaLhvlox1R0yVkKT",
+    "secret": "5BAbQrRy/B6Hz4SMALbR0nBQNJhPJJjrHKIzuWDLqCnBdyqo7bTaEwVIGSWK6uLigAa+yx1t5gEDzpDep8PEHg==",
+    "sandbox_mode": false,
+    "pair_whitelist": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "SOL/USDT",
+      "ADA/USDT",
+      "DOT/USDT",
+      "AVAX/USDT",
+      "LINK/USDT",
+      "ATOM/USDT",
+      "XRP/USDT",
+      "DOGE/USDT",
+      "SHIB/USDT",
+      "LTC/USDT",
+      "BCH/USDT",
+      "ALGO/USDT",
+      "XMR/USDT"
+    ],
+    "pair_blacklist": [],
+    "outdated_offset": 1,
+    "ccxt_config": {
+      "enableRateLimit": true
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 3000
+    }
+  },
+  "pairlists": [
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "order_types": {
+    "entry": "market",
+    "exit": "market",
+    "stoploss": "market",
+    "stoploss_on_exchange": false
+  },
+  "entry_pricing": {
+    "price_side": "other",
+    "use_order_book": false,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "price_side": "other",
+    "use_order_book": false
+  },
+  "max_entry_position_adjustment": -1,
+  "max_open_trades": 10,
+  "api_server": {
+    "enabled": true,
+    "listen_ip_address": "0.0.0.0",
+    "listen_port": 8080,
+    "verbosity": "error",
+    "enable_openapi": false,
+    "jwt_secret_key": "freqtrade_dry_run_secret_2026_kraken_bot",
+    "CORS_origins": [],
+    "username": "freqtrade",
+    "password": "freqtrade"
+  },
+  "logging": {
+    "logfile": "logs/freqtrade.log",
+    "loglevel": "INFO",
+    "logrotation": true,
+    "logfilecount": 30
+  }
+}

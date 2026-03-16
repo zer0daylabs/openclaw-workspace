@@ -1,10 +1,42 @@
 {
-  "lastChecks": {
-    "git_status": 1772890600,
-    "github": 1772890600,
-    "product_sites": 1772890700,
-    "finances": 1772890700
+  "heartbeatCounter": 1,
+  "lastHeartbeat": "2026-03-16T05:12:15Z",
+  "cadences": {
+    "resourceCheck": {
+      "every": 3,
+      "lastRun": 0,
+      "description": "Check Ollama VRAM, session tokens"
+    },
+    "learningSession": {
+      "every": 6,
+      "lastRun": 0,
+      "description": "Research a knowledge gap from KNOWLEDGE-MAP.md"
+    },
+    "performanceReview": {
+      "every": 168,
+      "lastRun": 0,
+      "description": "Weekly self-assessment (tasks done, skip rate, learning)"
+    },
+    "gitCommit": {
+      "every": 6,
+      "lastRun": 0,
+      "description": "Commit workspace changes to git"
+    }
   },
-  "lastHeartbeat": 1772806500,
-  "notes": "2:29 PM check - All systems healthy: MusicGen/AudioStudio repos clean (no open issues/PRs), AudioStudio.ai site responding normally, finances stable: $37.28 balance, $9.99 MRR. No urgent alerts."
+  "lastChecks": {
+    "git_status": null,
+    "github": null,
+    "product_sites": null,
+    "finances": null
+  },
+  "todayStats": {
+    "date": "2026-03-15",
+    "tasksCompleted": 0,
+    "tasksSkipped": 0,
+    "tasksCreated": 0,
+    "errorsEncountered": 1,
+    "factsStored": 0,
+    "knowledgeFilesUpdated": 0
+  },
+  "notes": "State upgraded 2026-03-15. Counter-based cadence tracking enabled. CB should increment heartbeatCounter and check cadences at start of every heartbeat."
 }

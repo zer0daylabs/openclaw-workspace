@@ -22,12 +22,10 @@ Search the knowledge graph for relevant facts.
 
 **Usage:**
 ```bash
-bash command:"
-GRAPHITI_URL=\$({baseDir}/references/env-check.sh)
-curl -s -X POST \"\$GRAPHITI_URL/facts/search\" \
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/search" \
   -H 'Content-Type: application/json' \
-  -d '{\"query\": \"YOUR_QUERY\", \"max_facts\": 10}' | jq .
-"
+  -d '{"query": "YOUR_QUERY", "max_facts": 10}' | jq .
 ```
 
 ### graphiti_add
@@ -35,12 +33,30 @@ Add a new episode/memory to the knowledge graph.
 
 **Usage:**
 ```bash
-bash command:"
-GRAPHITI_URL=\$({baseDir}/references/env-check.sh)
-curl -s -X POST \"\$GRAPHITI_URL/messages\" \
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/messages" \
   -H 'Content-Type: application/json' \
-  -d '{\"name\": \"EPISODE_NAME\", \"content\": \"EPISODE_CONTENT\"}' | jq .
-"
+  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "EPISODE_CONTENT"}]}' | jq .
+```
+
+### graphiti_list_episodes
+List episodes for a group.
+
+**Usage:**
+```bash
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -sf "$GRAPHITI_URL/episodes/ZER0DAY?last_n=10" | jq .
+```
+
+### graphiti_entity_node
+Add an entity node to the knowledge graph.
+
+**Usage:**
+```bash
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/entity-node" \
+  -H 'Content-Type: application/json' \
+  -d '{"name": "Node Name", "type": "category", "description": "Description"}' | jq .
 ```
 
 ## Dynamic Configuration
@@ -62,20 +78,71 @@ clawdbot config set skills.graphiti.baseUrl "http://10.0.0.10:8001"
 
 Search for information:
 ```bash
-bash command:"
-GRAPHITI_URL=\$({baseDir}/references/env-check.sh)
-curl -s -X POST \"\$GRAPHITI_URL/facts/search\" \
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/search" \
   -H 'Content-Type: application/json' \
-  -d '{\"query\": \"Tell me about Essam Masoudy\", \"max_facts\": 5}'
-"
+  -d '{"query": "Zer0Day Labs", "max_facts": 5}'
 ```
 
 Add a memory:
 ```bash
-bash command:"
-GRAPHITI_URL=\$({baseDir}/references/env-check.sh)
-curl -s -X POST \"\$GRAPHITI_URL/messages\" \
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/messages" \
   -H 'Content-Type: application/json' \
-  -d '{\"name\": \"Project Update\", \"content\": \"Completed Phase 1 of Clawdbot integration\"}'
-"
+  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "Project Update: Completed Phase 1 of Clawdbot integration"}]}'
 ```
+
+List episodes:
+```bash
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -sf "$GRAPHITI_URL/episodes/ZER0DAY?last_n=10"
+```
+
+Add entity node:
+```bash
+GRAPHITI_URL=$({baseDir}/references/env-check.sh)
+curl -s -X POST "$GRAPHITI_URL/entity-node" \
+  -H 'Content-Type: application/json' \
+  -d '{"name": "OpenClaw", "type": "system", "description": "AI agent framework for Zer0Day Labs"}'
+```
+
+## Endpoint Details
+
+### Search
+- **URL**: `/search`
+- **Method**: POST
+- **Body**: `{"query": "string", "max_facts": 10}`
+- **Returns**: `{"facts": [...]}`
+
+### Add Episode
+- **URL**: `/messages`
+- **Method**: POST
+- **Body**: `{"group_id": "string", "messages": [{"role": "user", "role_type": "user", "content": "string"}]}`
+- **Returns**: `{"message": "Messages added to processing queue", "success": true}`
+
+### List Episodes
+- **URL**: `/episodes/{group_id}`
+- **Method**: GET
+- **Params**: `last_n=10`
+- **Returns**: Episodes list
+
+### Add Entity Node
+- **URL**: `/entity-node`
+- **Method**: POST
+- **Body**: `{"name": "string", "type": "string", "description": "string"}`
+- **Returns**: Node UUID and status
+
+## Valid Role Types
+- `user` - User input
+- `assistant` - AI response
+- `system` - System instructions
+
+## Group ID Convention
+Use organization/project identifier as group_id:
+- `ZER0DAY` - Zer0Day Labs data
+- `TEAM` - Team collaboration
+- `PERSONAL` - Personal notes
+
+---
+*Updated*: 2026-03-07 01:30 MST
+*Status*: All endpoints verified operational ✅

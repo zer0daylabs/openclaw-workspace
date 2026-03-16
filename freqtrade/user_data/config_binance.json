@@ -1,0 +1,66 @@
+{
+  "stake_currency": "USDT",
+  "stake_amount": 10.0,
+  "tradable_balance_ratio": 0.99,
+  "fiat_display_currency": "USD",
+  "timeframe": "5m",
+  "dry_run": true,
+  "dry_run_wallet": 10000,
+  "cancel_open_orders_on_exit": false,
+  "unfilledtimeout": {
+    "order": 10,
+    "order_queue": 10
+  },
+  "strategy": "RsiMacD",
+  "exchange": {
+    "name": "binance",
+    "key": "",
+    "secret": "",
+    "sandbox_mode": true,
+    "pair_whitelist": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "SOL/USDT"
+    ],
+    "pair_blacklist": [],
+    "outdated_offset": 1,
+    "ccxt_config": {
+      "enableRateLimit": true
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true,
+      "rateLimit": 3000
+    }
+  },
+  "pairlists": [
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "entry_pricing": {
+    "price_side": "bid",
+    "use_order_book": true,
+    "order_book_top": 1,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "price_side": "ask",
+    "use_order_book": true,
+    "order_book_top": 1
+  },
+  "max_entry_position_adjustment": -1,
+  "stoploss": -0.1,
+  "trailing_stop": false,
+  "trailing_stop_positive_offset": 0.0,
+  "trailing_only_offset_is_reached": false,
+  "max_open_trades": 3,
+  "logging": {
+    "logfile": "logs/freqtrade.log",
+    "loglevel": "INFO",
+    "logrotation": true,
+    "logfilecount": 30
+  }
+}
