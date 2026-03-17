@@ -24,3 +24,8 @@ Graphiti auto-logging operational: All actions logged successfully - resource sn
 
 ---
 
+### 2026-03-16 18:24:55 MST (heartbeat #9)
+Agent main:main exceeded 100k token threshold at 132k tokens - note for memory optimization discussion
+
+---
+
