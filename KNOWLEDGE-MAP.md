@@ -66,7 +66,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 
 | Technology | Proficiency | Last Studied | Knowledge File | Notes |
 |-----------|------------|-------------|---------------|-------|
-| FreeSWITCH | unknown | — | — | VoIP/telephony platform |
+| FreeSWITCH | basic | 2026-03-17 | `knowledge/freeswitch.md` | EventVikings predictive dialer depends on it |
 | SIP Protocol | unknown | — | — | Session Initiation Protocol |
 | WebRTC | unknown | — | — | Real-time browser communication |
 | Locust | aware | — | — | Load testing (locustfile.py exists) |
@@ -100,7 +100,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 
 Technologies CB should learn next, ordered by mission impact:
 
-1. **FreeSWITCH** — EventVikings predictive dialer depends on it. Currently `unknown`.
+1. ✅ **FreeSWITCH** — EventVikings predictive dialer depends on it. RESearched 2026-03-17, moved to basic proficiency.
 2. **Hyperopt/Optuna** — Could significantly improve Freqtrade strategy. Currently `aware`.
 3. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
 4. **Sentry** — Need to set up proper error tracking. Currently `aware`.

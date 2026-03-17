@@ -29,3 +29,8 @@ Agent main:main exceeded 100k token threshold at 132k tokens - note for memory o
 
 ---
 
+### 2026-03-17 08:17:55 MST (heartbeat #12)
+Graphiti Docker service unavailable - graphiti not responding at localhost:8001
+
+---
+
