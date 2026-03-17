@@ -4,7 +4,7 @@
   "cadences": {
     "resourceCheck": {
       "every": 3,
-      "lastRun": 14,
+      "lastRun": 17,
       "description": "Check Ollama VRAM, session tokens"
     },
     "learningSession": {
@@ -19,7 +19,7 @@
     },
     "gitCommit": {
       "every": 6,
-      "lastRun": 11,
+      "lastRun": 17,
       "description": "Commit workspace changes to git"
     }
   },
