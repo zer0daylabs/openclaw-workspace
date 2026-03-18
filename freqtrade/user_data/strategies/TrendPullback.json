@@ -1,0 +1,40 @@
+{
+  "strategy_name": "TrendPullback",
+  "params": {
+    "max_open_trades": {
+      "max_open_trades": 10
+    },
+    "buy": {
+      "buy_adx_min": 30,
+      "buy_bb_rsi_max": 35,
+      "buy_ema_pullback_pct": 0.6,
+      "buy_require_1h_trend": true,
+      "buy_rsi_high": 56,
+      "buy_rsi_low": 42,
+      "buy_volume_mult": 0.7
+    },
+    "sell": {
+      "sell_force_exit_hours": 8,
+      "sell_profit_protect": 0.007,
+      "sell_profit_protect_min_minutes": 20,
+      "sell_rsi_exit": 69
+    },
+    "roi": {
+      "0": 0.19,
+      "17": 0.06,
+      "27": 0.013,
+      "40": 0
+    },
+    "stoploss": {
+      "stoploss": -0.099
+    },
+    "trailing": {
+      "trailing_stop": true,
+      "trailing_stop_positive": 0.244,
+      "trailing_stop_positive_offset": 0.312,
+      "trailing_only_offset_is_reached": true
+    }
+  },
+  "ft_stratparam_v": 1,
+  "export_time": "2026-03-17 22:31:38.789673+00:00"
+}

@@ -11,7 +11,7 @@
     "order": 10,
     "order_queue": 10
   },
-  "strategy": "RsiMacD",
+  "strategy": "BBMomentum",
   "exchange": {
     "name": "kraken",
     "key": "dwpo7UMyIP7/8FjHk+NqunHoTEV4heXdA3sS4XPFNaLhvlox1R0yVkKT",
