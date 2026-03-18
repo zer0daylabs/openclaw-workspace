@@ -84,7 +84,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | Technology | Proficiency | Last Studied | Knowledge File | Notes |
 |-----------|------------|-------------|---------------|-------|
 | Sentry | basic | 2026-03-18 | `knowledge/sentry.md` | Error tracking, scripts created but not deeply studied |
-| PostHog | aware | — | — | Product analytics, setup pending |
+| PostHog | basic | 2026-03-18 | `knowledge/posthog.md` | A/B testing, feature flags, pricing experiments |
 
 ## AI / ML
 
@@ -102,9 +102,9 @@ Technologies CB should learn next, ordered by mission impact:
 
 1. ✅ **FreeSWITCH** — EventVikings predictive dialer depends on it. RESearched 2026-03-17, moved to basic proficiency.
 2. ✅ **Sentry** — Error tracking setup needed. RESearched 2026-03-18, basic proficiency, scripts created.
-3. **Hyperopt/Optuna** — Could significantly improve Freqtrade strategy. Currently `aware`.
-4. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
-5. **PostHog** — Need for product analytics and A/B testing. Currently `aware`.
+3. ✅ **PostHog** — A/B testing for pricing. RESearched 2026-03-18, basic proficiency, knowledge file created.
+4. **Hyperopt/Optuna** — Could significantly improve Freqtrade strategy. Currently `aware`.
+5. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
 6. **Microsoft 365 / Entra** — OAuth integration pending. Currently `aware`.
 
 ---
