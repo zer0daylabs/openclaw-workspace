@@ -60,7 +60,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | Freqtrade | working | 2026-03-09 | `knowledge/freqtrade.md` | Trading bot framework |
 | Kraken API | basic | — | — | Exchange API |
 | Technical Analysis | basic | — | — | RSI, MACD, Bollinger Bands, etc. |
-| Hyperopt/Optuna | aware | — | — | Strategy optimization |
+| Hyperopt/Optuna | basic | 2026-03-18 | `knowledge/hyperopt.md` | Strategy optimization, loss functions |
 
 ## Telecom / EventVikings
 
@@ -103,7 +103,7 @@ Technologies CB should learn next, ordered by mission impact:
 1. ✅ **FreeSWITCH** — EventVikings predictive dialer depends on it. RESearched 2026-03-17, moved to basic proficiency.
 2. ✅ **Sentry** — Error tracking setup needed. RESearched 2026-03-18, basic proficiency, scripts created.
 3. ✅ **PostHog** — A/B testing for pricing. RESearched 2026-03-18, basic proficiency, knowledge file created.
-4. **Hyperopt/Optuna** — Could significantly improve Freqtrade strategy. Currently `aware`.
+4. ✅ **Hyperopt/Optuna** — Freqtrade strategy optimization. RESearched 2026-03-18, basic proficiency, knowledge file created.
 5. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
 6. **Microsoft 365 / Entra** — OAuth integration pending. Currently `aware`.
 
