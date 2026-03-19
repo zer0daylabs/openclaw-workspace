@@ -17,7 +17,7 @@ QUERY="$1"
 # Search graphiti using proper JSON encoding
 RESPONSE=$(curl -s -X POST "$GRAPHITI_URL/search" \
   -H "Content-Type: application/json" \
-  --data-binary "{\"query\": \"$QUERY\", \"max_facts\": 10}")
+  --data-binary "{\"query\": \"$QUERY\", \"group_ids\": [\"clawdbot-main\"], \"max_facts\": 10}")
 
 # Extract and display facts
 FACTS=$(echo "$RESPONSE" | jq -r '.facts[] | "• \(.fact)"')

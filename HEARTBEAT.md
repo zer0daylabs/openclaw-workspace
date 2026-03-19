@@ -118,7 +118,7 @@ cat ~/.openclaw/workspace/memory/last-session.md
 
 Check these conditions and alert to Slack if true:
 - **Freqtrade stopped:** `curl -s http://localhost:8080/api/v1/status -u freqtrade:freqtrade | jq '.status'` — if not "running", alert
-- **Graphiti down:** `curl -sf http://localhost:8001/health` — if fails, alert
+- **Graphiti down:** `curl -sf http://localhost:8001/healthcheck` — if fails, alert
 - **Tasks stagnating:** If 3+ tasks have been `in_progress` for >24h, alert
 - **High skip rate:** If >50% of recent tasks are skipped, alert + create meta-task to investigate
 
@@ -395,17 +395,17 @@ Log significant events to Graphiti automatically:
 # Log lesson learned
 curl -s -X POST http://localhost:8001/messages \
   -H "Content-Type: application/json" \
-  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "Lesson: Write files immediately instead of relying on mental notes."}]}'
+  -d '{"group_id": "clawdbot-main", "messages": [{"role": "user", "role_type": "user", "content": "Lesson: Write files immediately instead of relying on mental notes."}]}'
 
 # Log decision made
 curl -s -X POST http://localhost:8001/messages \
   -H "Content-Type: application/json" \
-  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "Decision: Implemented memory system as daily logs + MEMORY.md curation."}]}'
+  -d '{"group_id": "clawdbot-main", "messages": [{"role": "user", "role_type": "user", "content": "Decision: Implemented memory system as daily logs + MEMORY.md curation."}]}'
 
 # Log milestone achieved
 curl -s -X POST http://localhost:8001/messages \
   -H "Content-Type: application/json" \
-  -d '{"group_id": "ZER0DAY", "messages": [{"role": "user", "role_type": "user", "content": "Milestone: Graphiti knowledge graph operational with 9 facts stored."}]}'
+  -d '{"group_id": "clawdbot-main", "messages": [{"role": "user", "role_type": "user", "content": "Milestone: Graphiti knowledge graph operational with 9 facts stored."}]}'
 ```
 
 ### Query for Self-Reflection
@@ -416,17 +416,17 @@ curl -s -X POST http://localhost:8001/messages \
 # What lessons exist on this topic?
 curl -s -X POST http://localhost:8001/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "lessons about memory management", "max_facts": 10}' | jq '.facts[].fact'
+  -d '{"query": "lessons about memory management", "group_ids": ["clawdbot-main"], "max_facts": 10}' | jq '.facts[].fact'
 
 # What decisions were made previously?
 curl -s -X POST http://localhost:8001/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "previous decisions on task management", "max_facts": 10}' | jq '.facts[].fact'
+  -d '{"query": "previous decisions on task management", "group_ids": ["clawdbot-main"], "max_facts": 10}' | jq '.facts[].fact'
 
 # What skills are available?
 curl -s -X POST http://localhost:8001/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "available agent skills", "max_facts": 10}' | jq '.facts[].fact'
+  -d '{"query": "available agent skills", "group_ids": ["clawdbot-main"], "max_facts": 10}' | jq '.facts[].fact'
 
 # Quick query helper:
 ~/.openclaw/workspace/bin/graphiti-query.sh "lessons about memory management"
@@ -473,7 +473,7 @@ Check what's stored:
 # Count total facts
 curl -s -X POST http://localhost:8001/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "anything", "max_facts": 100}' | jq '.facts | length'
+  -d '{"query": "anything", "group_ids": ["clawdbot-main"], "max_facts": 100}' | jq '.facts | length'
 
 # Review recent additions
 curl -s http://localhost:8001/episodes/clawdbot-main?last_n=10 | jq '.episodes'

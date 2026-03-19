@@ -75,7 +75,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 
 | Technology | Proficiency | Last Studied | Knowledge File | Notes |
 |-----------|------------|-------------|---------------|-------|
-| Microsoft 365 / Entra | aware | 2026-03-15 | — | OAuth setup started, not completed |
+| Microsoft 365 / Entra | basic | 2026-03-19 | `knowledge/entra-oauth.md` | OAuth setup, SSO integration |
 | OAuth 2.0 | basic | — | — | Used in MS 365, Stripe |
 | JWT | basic | — | — | Freqtrade API auth |
 
@@ -104,8 +104,8 @@ Technologies CB should learn next, ordered by mission impact:
 2. ✅ **Sentry** — Error tracking setup needed. RESearched 2026-03-18, basic proficiency, scripts created.
 3. ✅ **PostHog** — A/B testing for pricing. RESearched 2026-03-18, basic proficiency, knowledge file created.
 4. ✅ **Hyperopt/Optuna** — Freqtrade strategy optimization. RESearched 2026-03-18, basic proficiency, knowledge file created.
-5. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
-6. **Microsoft 365 / Entra** — OAuth integration pending. Currently `aware`.
+5. ✅ **Microsoft 365 / Entra** — OAuth SSO integration. RESearched 2026-03-19, basic proficiency, knowledge file created.
+6. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
 
 ---
 

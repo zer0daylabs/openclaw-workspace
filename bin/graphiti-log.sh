@@ -7,7 +7,7 @@
 set -e
 
 GRAPHITI_URL="http://localhost:8001"
-GROUP_ID="ZER0DAY"
+GROUP_ID="clawdbot-main"
 
 # Check if message provided
 if [ -z "$1" ]; then
@@ -20,9 +20,9 @@ MESSAGE="$1"
 # Log to graphiti using proper JSON encoding
 RESPONSE=$(curl -s -X POST "$GRAPHITI_URL/messages" \
   -H "Content-Type: application/json" \
-  --data-binary "{\"group_id\": \"$GROUP_ID\", \"messages\": [{\"role\": \"user\", \"role_type\": \"user\", \"content\": \"$MESSAGE\"]}")
+  --data-binary "{\"group_id\": \"$GROUP_ID\", \"messages\": [{\"role\": \"user\", \"role_type\": \"user\", \"content\": \"$MESSAGE\"}]}")
 
-if echo "$RESPONSE" | grep -q '"success": true'; then
+if echo "$RESPONSE" | grep -q '"success"[: ]*true'; then
     echo "✅ Logged to Graphiti: $MESSAGE"
 else
     echo "❌ Failed to log: $RESPONSE"
