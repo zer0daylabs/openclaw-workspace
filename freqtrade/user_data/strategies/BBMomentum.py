@@ -165,15 +165,6 @@ class BBMomentum(IStrategy):
                     current_rate: float, current_profit: float, **kwargs):
         trade_minutes = (current_time - trade.open_date_utc).total_seconds() / 60
 
-        # Early loss cut: if still losing after N minutes, exit small
-        if (trade_minutes >= self.sell_early_loss_minutes.value and
-                current_profit < self.sell_early_loss_threshold.value):
-            return 'early_loss_cut'
-
-        # Force exit: negative after N hours
-        if trade_minutes >= self.sell_force_exit_hours.value * 60 and current_profit < 0:
-            return 'force_exit'
-
         # Profit protect: lock in gains when RSI getting high
         if (current_profit > self.sell_profit_protect.value and
                 trade_minutes >= self.sell_profit_protect_min_minutes.value):
