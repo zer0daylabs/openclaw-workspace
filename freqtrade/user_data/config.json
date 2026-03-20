@@ -1,6 +1,6 @@
 {
   "stake_currency": "USDT",
-  "stake_amount": 10.0,
+  "stake_amount": 50.0,
   "tradable_balance_ratio": 0.99,
   "fiat_display_currency": "USD",
   "timeframe": "5m",
@@ -50,8 +50,8 @@
     }
   ],
   "order_types": {
-    "entry": "market",
-    "exit": "market",
+    "entry": "limit",
+    "exit": "limit",
     "stoploss": "market",
     "stoploss_on_exchange": false
   },
@@ -68,7 +68,7 @@
     "use_order_book": false
   },
   "max_entry_position_adjustment": -1,
-  "max_open_trades": 10,
+  "max_open_trades": 8,
   "api_server": {
     "enabled": true,
     "listen_ip_address": "0.0.0.0",

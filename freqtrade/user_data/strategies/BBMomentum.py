@@ -12,7 +12,7 @@ Entry signals:
 Exits: Tiered ROI + trailing stop + custom (profit protect, force exit)
 No exit_signal (proven loser in previous strategies).
 
-Designed for: Kraken, 5m, USDT pairs, $10 stakes
+Designed for: Kraken, 5m, USDT pairs, $50 stakes, limit orders
 """
 
 import numpy as np
@@ -38,17 +38,17 @@ class BBMomentum(IStrategy):
 
     # --- ROI: take profits progressively ---
     minimal_roi = {
-        "0": 0.015,
-        "30": 0.008,
-        "60": 0.004,
-        "120": 0,
+        "0": 0.03,
+        "30": 0.02,
+        "60": 0.01,
+        "120": 0.005,
     }
 
     # --- Risk management ---
-    stoploss = -0.015
+    stoploss = -0.03
     trailing_stop = True
-    trailing_stop_positive = 0.004
-    trailing_stop_positive_offset = 0.008
+    trailing_stop_positive = 0.01
+    trailing_stop_positive_offset = 0.015
     trailing_only_offset_is_reached = True
 
     # --- Hyperopt: entry parameters ---
