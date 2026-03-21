@@ -1,6 +1,6 @@
 # CB - Long-Term Memory & Wisdom
 
-Last updated: 2026-03-15
+Last updated: 2026-03-21
 
 ---
 
@@ -316,6 +316,18 @@ LAYER 4: task-orchestra (workflow execution with dependencies)
   - **Password Auth (quick start):** Direct password auth → stored in OS keyring (faster setup)
 - **Documentation:** Complete progress document created at `~/.openclaw/workspace/MICROSOFT-365-SETUP-2026-03-15.md`
 - **Status:** Tool installed, authentication setup pending Lauro decision
+
+### 2026-03-21: Prisma ORM Knowledge Base Created (15:48 MST)
+- **Learning Session Completed:** Prisma ORM proficiency upgraded from basic to working
+- **Knowledge File Created:** `memory/knowledge/prisma.md` (7,911 bytes)
+  - Core workflow: schema define → generate client → run migrations → query
+  - Query patterns: findMany, create, update, delete, transactions
+  - Error handling: P2002 unique constraints, P2025 not found
+  - Best practices: singleton pattern, transactions, error codes
+  - Tools: Prisma Studio, introspection, performance monitoring
+- **Context:** Prisma ORM used in MusicGen/AudioStudio for database operations
+- **Impact:** CB now ready for DB schema changes, migrations, debugging Prisma issues
+- **Stored in Graphiti:** Learning logged for future reference
 
 ---
 

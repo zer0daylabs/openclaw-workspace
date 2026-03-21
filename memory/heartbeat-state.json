@@ -1,15 +1,15 @@
 {
-  "heartbeatCounter": 53,
-  "lastHeartbeat": "2026-03-21T15:47:55Z",
+  "heartbeatCounter": 59,
+  "lastHeartbeat": "2026-03-21T22:47:39Z",
   "cadences": {
     "resourceCheck": {
       "every": 3,
-      "lastRun": 44,
+      "lastRun": 57,
       "description": "Check Ollama VRAM, session tokens"
     },
     "learningSession": {
       "every": 6,
-      "lastRun": 53,
+      "lastRun": 59,
       "description": "Research a knowledge gap from KNOWLEDGE-MAP.md"
     },
     "performanceReview": {
@@ -19,7 +19,7 @@
     },
     "gitCommit": {
       "every": 6,
-      "lastRun": 35,
+      "lastRun": 53,
       "description": "Commit workspace changes to git"
     }
   },
@@ -36,7 +36,8 @@
     "tasksCreated": 0,
     "errorsEncountered": 0,
     "factsStored": 0,
-    "knowledgeFilesUpdated": 0
+    "knowledgeFilesUpdated": 0,
+    "systemCheck": 1
   },
   "notes": "State upgraded 2026-03-15. Counter-based cadence tracking enabled. CB should increment heartbeatCounter and check cadences at start of every heartbeat."
 }

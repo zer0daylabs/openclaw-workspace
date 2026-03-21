@@ -67,7 +67,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | Technology | Proficiency | Last Studied | Knowledge File | Notes |
 |-----------|------------|-------------|---------------|-------|
 | FreeSWITCH | basic | 2026-03-17 | `knowledge/freeswitch.md` | EventVikings predictive dialer depends on it |
-| SIP Protocol | unknown | — | — | Session Initiation Protocol |
+| SIP Protocol | aware | 2026-03-21 | `knowledge/sip-protocol.md` | Signaling protocol, core to predictive dialer |
 | WebRTC | unknown | — | — | Real-time browser communication |
 | Locust | aware | — | — | Load testing (locustfile.py exists) |
 
@@ -106,6 +106,7 @@ Technologies CB should learn next, ordered by mission impact:
 4. ✅ **Hyperopt/Optuna** — Freqtrade strategy optimization. RESearched 2026-03-18, basic proficiency, knowledge file created.
 5. ✅ **Microsoft 365 / Entra** — OAuth SSO integration. RESearched 2026-03-19, basic proficiency, knowledge file created.
 6. ✅ **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio. RESearched 2026-03-21, moved to working proficiency, knowledge file created (`memory/knowledge/prisma.md`).
+7. ✅ **SIP Protocol** — Critical for EventVikings predictive dialer. RESearched 2026-03-21, moved to aware proficiency with foundation, knowledge file created (`memory/knowledge/sip-protocol.md`).
 
 ---
 
