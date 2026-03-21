@@ -105,7 +105,7 @@ Technologies CB should learn next, ordered by mission impact:
 3. ✅ **PostHog** — A/B testing for pricing. RESearched 2026-03-18, basic proficiency, knowledge file created.
 4. ✅ **Hyperopt/Optuna** — Freqtrade strategy optimization. RESearched 2026-03-18, basic proficiency, knowledge file created.
 5. ✅ **Microsoft 365 / Entra** — OAuth SSO integration. RESearched 2026-03-19, basic proficiency, knowledge file created.
-6. **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio.
+6. ✅ **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio. RESearched 2026-03-21, moved to working proficiency, knowledge file created (`memory/knowledge/prisma.md`).
 
 ---
 
