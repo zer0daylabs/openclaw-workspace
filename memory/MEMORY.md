@@ -329,6 +329,19 @@ LAYER 4: task-orchestra (workflow execution with dependencies)
 - **Impact:** CB now ready for DB schema changes, migrations, debugging Prisma issues
 - **Stored in Graphiti:** Learning logged for future reference
 
+### 2026-03-21: SIP Protocol Knowledge Base Created (22:48 MST)
+- **Learning Session Completed:** SIP Protocol foundation established (EventVikings predictive dialer)
+- **Knowledge File Created:** `memory/knowledge/sip-protocol.md` (8,668 bytes)
+  - SIP basics: signaling protocol (not media transport - that's RTP)
+  - Core functions: user location, availability, capabilities, session setup/management
+  - Request/Response model: 7 methods (INVITE, ACK, BYE, CANCEL, REGISTER, OPTIONS, UPDATE)
+  - SDP negotiation: session parameters, codecs (G729, PCMU, GSM), port negotiation
+  - Architecture: UAC/UAS, registrar, proxy, redirect servers
+  - Port 5060 standard, 5061 for TLS, NAT traversal (STUN/TURN/ICE)
+- **Context:** Critical for EventVikings predictive dialer integration with FreeSWITCH
+- **Proficiency:** aware (foundation established, ready for basic implementation)
+- **Stored in Graphiti:** Learning logged for future reference
+
 ---
 
 ## Files & Locations
