@@ -68,7 +68,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 |-----------|------------|-------------|---------------|-------|
 | FreeSWITCH | basic | 2026-03-17 | `knowledge/freeswitch.md` | EventVikings predictive dialer depends on it |
 | SIP Protocol | aware | 2026-03-21 | `knowledge/sip-protocol.md` | Signaling protocol, core to predictive dialer |
-| WebRTC | aware | 2026-03-22 | `knowledge/webrtc.md` | Browser-based real-time comms, agent interface |
+| WebRTC | **working** | **2026-03-23** | `knowledge/webrtc.md` | **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** - Real-time browser-based communication for agent interface |
 | Locust | aware | — | — | Load testing (locustfile.py exists) |
 
 ## Auth & Identity
@@ -107,7 +107,7 @@ Technologies CB should learn next, ordered by mission impact:
 5. ✅ **Microsoft 365 / Entra** — OAuth SSO integration. RESearched 2026-03-19, basic proficiency, knowledge file created.
 6. ✅ **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio. RESearched 2026-03-21, moved to working proficiency, knowledge file created (`memory/knowledge/prisma.md`).
 7. ✅ **SIP Protocol** — Critical for EventVikings predictive dialer. RESearched 2026-03-21, moved to aware proficiency with foundation, knowledge file created (`memory/knowledge/sip-protocol.md`).
-8. ✅ **WebRTC** — Browser-based real-time communication for agent interface. RESearched 2026-03-22, moved to aware proficiency with foundation, knowledge file created (`memory/knowledge/webrtc.md`).
+8. ✅ **WebRTC** — Browser-based real-time communication for agent interface. **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** (`memory/knowledge/webrtc.md`).
 
 ---
 

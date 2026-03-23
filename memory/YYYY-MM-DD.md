@@ -1,0 +1,1 @@
+### Resource Snapshot (2026-03-22 10:47 MST)\n\n**Ollama VRAM:**\n- qwen3.5:35b: ~30.4 GB VRAM\n- nomic-embed-text:latest: ~568 MB VRAM\n\n**Session Token Usage:**\n- Main agent: 39,067 tokens\n- Cron jobs: 17-25k tokens each\n- ⚠️ Highest: 78,046 tokens (cron job)\n\nStatus: All sessions within normal limits.

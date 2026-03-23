@@ -1,394 +1,509 @@
-# CB Knowledge: WebRTC (Web Real-Time Communication)
+# CB WebRTC Knowledge — Browser-Based Real-Time Communication
 
-Proficiency: **aware** (updated 2026-03-22)
-Last Studied: **2026-03-22**
+**Last Updated:** 2026-03-23 (Heartbeat #87)  
+**Proficiency:** basic → working (after this research session)  
+**Context:** EventVikings predictive dialer agent interface
 
 ---
 
 ## What is WebRTC?
 
-**WebRTC (Web Real-Time Communication)** is a collection of APIs and protocols that enable real-time peer-to-peer communication directly between web browsers, without requiring plugins, drivers, or intermediary servers for media transfer.
+**Web Real-Time Communication (WebRTC)** enables direct peer-to-peer audio, video, and data streaming between browsers without requiring plugins or drivers. It's the foundation for browser-based real-time communication.
 
-### Core Capabilities
+### Key Capabilities:
+- **Audio/video conferencing** — Direct peer streaming
+- **File exchange** — Arbitrary data transfer
+- **Screen sharing** — Capture and stream desktop
+- **Identity management** — User authentication
+- **DTMF support** — Touch-tone dialing (for telecom integration)
+- **PSTN interactivity** — Legacy telephone system connections
 
-- **Audio/Video Conferencing** - Browser-based calls
-- **File Exchange** - Direct file transfer between peers
-- **Screen Sharing** - Share browser tabs/desktop
-- **Identity Management** - Secure peer authentication
-- **Legacy Integration** - PSTN gateway, DTMF signaling
-- **Peer-to-Peer Data Transfer** - Arbitrary binary data
-
-**Key Advantage:** Direct browser-to-browser connection without server-side media relaying (uses signaling server only for setup).
-
----
-
-## WebRTC vs SIP (Comparison for EventVikings Context)
-
-### SIP (Session Initiation Protocol)
-- **Purpose:** Call signaling only (not media transport)
-- **Transport:** RTP carries actual voice/video after SIP establishes session
-- **Use Case:** Traditional VoIP, predictive dialer to PSTN
-- **Server:** SIP proxy/registrars (FreeSWITCH)
-- **Browser:** Not natively supported
-
-### WebRTC
-- **Purpose:** Full real-time communication (signaling + media)
-- **Transport:** RTP/SCTP carries media/data directly
-- **Use Case:** Browser-based communication apps
-- **Server:** Signaling server (WebSocket/HTTP) for setup only
-- **Browser:** Native support (Chrome, Firefox, Safari, Edge)
-
-**EventVikings Context:**
-- SIP + FreeSWITCH: Traditional predictive dialer → PSTN calls
-- WebRTC: Browser-based dialer, screen sharing, live agent feedback
-
----
-
-## Core WebRTC Architecture
-
-### 1. RTCPeerConnection
-**Central interface** for managing peer connections.
-
-Key responsibilities:
-- Establishes connection between two peers
-- Handles ICE/STUN/TURN negotiation
-- Manages media streams and data channels
-- Monitors connection state
-
-### 2. Media Streams (MediaStream)
-**Captured media** from user's device.
-
-Sources:
-- **getUserMedia()** - Webcam, microphone
-- **getDisplayMedia()** - Screen sharing
-- **MediaStreamTrack** - Individual audio/video/text tracks
-
-### 3. RTCDataChannel
-**Bi-directional data channel** for arbitrary binary data.
-
-Use cases:
-- Real-time chat messages
-- File transfer
-- Game status packets
-- Back-channel metadata
-- Remote control commands
-
-**Similar to WebSocket** API with `send()` and `message` events.
-
-### 4. RTCSessionDescription
-**SDP (Session Description Protocol)** - Exchange of media capabilities.
-
-Contains:
-- Codec preferences (VP8, VP9, H.264, Opus)
-- Resolution/quality parameters
-- ICE candidates for NAT traversal
+### Security Model:
+- **Encryption mandatory** — All WebRTC components encrypted
+- **Secure origins only** — HTTPS or localhost required
+- **Signaling must be secured** — WebRTC doesn't define signaling protocol
+- **Browser-based** — Works on all modern browsers
 
 ---
 
 ## Core WebRTC APIs
 
-### getUserMedia() - Capture Media
+### 1. **getUserMedia()** — Media Capture ⭐
+
+Acquires audio/video from local devices (camera, microphone).
+
 ```javascript
-const constraints = {
-  video: true,        // or specific resolution
+const mediaConstraints = {
+  video: true,
   audio: true
 };
 
-navigator.mediaDevices.getUserMedia(constraints)
+navigator.mediaDevices.getUserMedia(mediaConstraints)
   .then(stream => {
-    localVideo.srcObject = stream;
+    // Success: mediaStream is a MediaStream object
+    videoElement.srcObject = stream;
   })
   .catch(error => {
-    console.error('Camera access denied:', error);
+    console.error('getUserMedia error:', error);
   });
 ```
 
-**Browser permission required** for camera/microphone access.
+**Key points:**
+- Returns `MediaStream` object with `MediaStreamTrack` instances
+- Browser prompts user for permission
+- Use `navigator.mediaDevices` (modern API), not deprecated `navigator.getUserMedia`
+- Supports constraints for resolution, frame rate, etc.
 
-### RTCPeerConnection - Establish Connection
+---
+
+### 2. **RTCPeerConnection** — Peer Connection Management ⭐⭐
+
+The core interface for establishing and managing peer-to-peer WebRTC connections.
+
 ```javascript
+// Create peer connection with STUN/TURN servers
 const servers = {
   iceServers: [
-    { urls: "stun:stun.l.google.com:19302" },
-    { urls: "turn:example.com:3478", username: "user", credential: "pass" }
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'turn:example.com:3478', username: 'user', credential: 'pass' }
   ]
 };
 
-const peerConnection = new RTCPeerConnection(servers);
+const pc = new RTCPeerConnection(servers);
 
-// Add local stream to connection
-peerConnection.addTrack(localStream.getTracks()[0]);
+// Add local stream
+pc.addStream(localStream);
 
-// Listen for ICE candidates (network paths)
-peerConnection.addEventListener('icecandidate', (event) => {
+// Handle ICE candidates (network discovery)
+pc.onicecandidate = event => {
   if (event.candidate) {
-    // Send to remote peer via signaling channel
-    signalingChannel.send({ type: 'candidate', candidate: event.candidate });
+    // Send candidate to remote peer via signaling
+    signalingSocket.emit('candidate', event.candidate);
   }
-});
+};
 
-// Create offer (initiator)
-peerConnection.createOffer()
-  .then(desc => peerConnection.setLocalDescription(desc))
-  .then(() => {
-    // Send SDP offer to remote peer via signaling
-    signalingChannel.send({ type: 'offer', sdp: peerConnection.localDescription });
-  });
-
-// Receive offer, create answer
-peerConnection.ontrack = (event) => {
+// Handle remote tracks when peer sends media
+pc.ontrack = event => {
   remoteVideo.srcObject = event.streams[0];
 };
+
+// Handle incoming data channels
+pc.ondatachannel = event => {
+  dataChannel = event.channel;
+};
 ```
 
-### RTCDataChannel - Data Exchange
+**Connection states:**
+- `new` — Just created
+- `connecting` — Establishing connection
+- `connected` — Established and streaming
+- `completed` — Connected and all channels established
+- `disconnected` — Temporary failure
+- `failed` — Connection failed permanently
+- `closed` — Ended
+
+---
+
+### 3. **RTCDataChannel** — Data Streaming ⭐
+
+Bi-directional data channel for arbitrary binary data transfer.
+
 ```javascript
 // Create data channel
-const dataChannel = peerConnection.createDataChannel('chat');
+const dataChannel = pc.createDataChannel('myDataChannel', {
+  ordered: true,       // Default: true, reliable delivery
+  maxRetransmits: 10,  // For unordered mode
+  negotiated: false,   // Created via createDataChannel()
+  id: 0              // If negotiated=true
+});
 
+// Open handler
 dataChannel.onopen = () => {
   console.log('Data channel opened');
-  dataChannel.send('Hello from sender!');
+  dataChannel.send('Hello, peer!');
 };
 
-dataChannel.onmessage = (event) => {
+// Message handler
+dataChannel.onmessage = event => {
   console.log('Received:', event.data);
 };
+
+// Close handler
+dataChannel.onclose = () => {
+  console.log('Data channel closed');
+};
+
+// Send data (text, ArrayBuffer, Blob, or DataView)
+dataChannel.send('Text message');
+dataChannel.send(arrayBuffer);
 ```
 
-### Signaling - Connection Setup Exchange
-**Critical component:** WebRTC peers need a signaling channel (WebSocket, HTTP, etc.) to exchange:
-- ICE candidates (network paths)
-- SDP offers/answers (media capabilities)
-
-Example signaling flow:
-```
-Peer A                                    Peer B
-  │                                         │
-  ├─ createOffer() ────────────────────────>│
-  │  setLocalDescription()                  │
-  │  ──────────────────────────────────────>│
-  │                                         ├─ setRemoteDescription()
-  │                                         ├─ createAnswer()
-  │                                         ├─ setLocalDescription()
-  │  <──────────────────────────────────────┤
-  │  setRemoteDescription()                 │
-  │                                         │
-  ├─ ICE connection established ───────────────────────
-  │    │                                         │
-  │    └────── Real-time communication ──────┘
-```
+**Key features:**
+- **Ordered delivery** by default (packets arrive in order)
+- **Reliable** (guaranteed delivery with retransmission)
+- **Similar to WebSocket** — Familiar API
+- **Binary data support** — Efficient large transfers
+- **SCTP-based** — Stream Control Transmission Protocol
 
 ---
 
-## ICE, STUN, TURN - NAT Traversal
+## WebRTC Connection Lifecycle
 
-### The Problem: Firewalls and NAT
-- Peers are behind routers/firewalls
-- Private IP addresses not routable
-- Need to discover public IP and open ports
+### 1. **ICE Candidate Discovery** (Interactive Connectivity Establishment)
 
-### Solutions:
+Process of finding network interfaces and potential connection endpoints.
 
-#### ICE (Interactive Connectivity Establishment)
-**Framework** for finding best path between peers.
-- Gathers all possible network interfaces
-- Tests connectivity between candidates
-- Selects best working path
+**What happens:**
+- Browser scans local network interfaces
+- Discovers potential IP addresses and ports
+- Reports candidates via `icecandidate` events
+- Candidates exchanged via signaling channel
 
-#### STUN (Session Traversal Utilities for NAT)
-**Discovers public IP/port** mapping.
-- Server: `stun:stun.l.google.com:19302`
-- Returns: "Your public IP is X.X.X.X:PORT"
-- Free, public STUN servers available
+**Candidate types:**
+- **host** — Local interface (192.168.x.x, 10.x.x.x)
+- **srflx** — STUN-discovered public address
+- **relay** — TURN relay server address
 
-#### TURN (Traversal Using Relays around NAT)
-**Relays traffic** when direct P2P fails (symmetric NAT, strict firewalls).
-- Server: `turn:server:port`
-- Requires authentication
-- Costs money (bandwidth relay)
-- Fallback for STUN failures
+### 2. **Signaling** — Session Negotiation ⭐⭐⭐
 
----
+WebRTC doesn't define signaling protocols — you implement this using WebSocket, Socket.IO, or other messaging systems.
 
-## WebRTC Protocol Stack
+**Perfect Negotiation Pattern:**
 
-```┌─────────────────────────────────────┐
-│    Application Layer                │
-│   ┌─────────────────────────────┐   │
-│   │ RTCDataChannel (SCTP)       │   │
-│   │ (for arbitrary data)        │   │
-│   └─────────────────────────────┘   │
-├─────────────────────────────────────┤
-│   Transport Layer                   │
-│   ┌─────────────────────────────┐   │
-│   │ RTP (Real-time Transport)   │   │
-│   │ (for audio/video streams)   │   │
-│   └─────────────────────────────┘   │
-├─────────────────────────────────────┤
-│   Signaling Layer                   │
-│   ┌─────────────────────────────┐   │
-│   │ SDP (Session Description)   │   │
-│   │ (via WebSocket/HTTP)        │   │
-│   └─────────────────────────────┘   │
-└─────────────────────────────────────┘
-
-ICE/STUN/TURN - Network path discovery
-DTLS - Encryption handshake
-SRTP - Encrypted media transport
-```
-
----
-
-## WebRTC in EventVikings Predictive Dialer Context
-
-### Integration Architecture
-
-**Hybrid Approach:**
-```
-┌──────────────────────────────────────────────────┐
-│           EventVikings Predictive Dialer         │
-├──────────────────────────────────────────────────┤
-│  ┌─────────────────┐     ┌─────────────────────┐ │
-│  │  SIP Protocol   │     │   WebRTC Browser    │ │
-│  │  (FreeSWITCH)   │     │   Agent Interface   │ │
-│  └────────┬────────┘     └──────────┬──────────┘ │
-│           │                         │             │
-│           │         ┌───────────────┘             │
-│           │         │                             │
-│           ▼         ▼                             │
-│  ┌─────────────────────────────────────────────┐ │
-│  │         Agent Dashboard (Web Browser)       │ │
-│  │  - Call controls (hangup, transfer, hold)   │ │
-│  │  - Screen sharing with training             │ │
-│  │  - Live monitoring and feedback             │ │
-│  │  - DTMF dialing support                     │ │
-│  └─────────────────────────────────────────────┘ │
-└──────────────────────────────────────────────────┘
-```
-
-### Use Cases for WebRTC:
-
-1. **Agent Desktop**
-   - Browser-based call interface
-   - No software installation needed
-   - Cross-platform compatibility
-
-2. **Screen Sharing**
-   - Trainer monitors agent calls in real-time
-   - Instant feedback and coaching
-   - Compliance recording
-
-3. **Call Recording**
-   - Store audio locally or in browser storage
-   - Privacy controls (redaction)
-   - Export for analytics
-
-4. **DTMF Support**
-   - Dial pad integration
-   - IVR navigation
-   - Customer self-service
-
-5. **Call Transfer**
-   - Warm transfer to supervisor
-   - Cold transfer to specialized agents
-   - Seamless handoff
-
----
-
-## Browser Compatibility
-
-### Native Support (No adapter needed):
-- Chrome 38+
-- Firefox 44+
-- Safari 11.1+
-- Edge 16+
-
-### Legacy Support:
-- **adapter.js** - Cross-browser shim library
-- **GitHub:** `webrtcHacks/adapter` or `webrtc/adapter`
-- Purpose: Normalize browser API differences
-
----
-
-## Security Considerations
-
-### Required for All Connections:
-- **DTLS (Datagram TLS)** - Encryption at transport layer
-- **SRTP (Secure RTP)** - Encrypted media streams
-- **SCTP over DTLS** - Secure data channels
-
-### Best Practices:
-1. **HTTPS Required** - WebRTC only works on secure origins (HTTPS or localhost)
-2. **Certificate Authority** - Use valid TLS certificates
-3. **User Consent** - Always request camera/mic permissions explicitly
-4. **TURN Server Credentials** - Strong authentication, avoid default passwords
-5. **Data Encryption** - All WebRTC traffic encrypted by default
-
----
-
-## Performance Monitoring
-
-### Key Metrics:
 ```javascript
-const stats = await peerConnection.getStats();
-stats.forEach(report => {
-  // Packet loss, jitter, latency
-  // Bytes sent/received
-  // Codec information
-  // Connection quality
-});
+let localPeer, remotePeer;
+let isInitiator = false;
+
+function createPeerConnection() {
+  const servers = { iceServers: [...] };
+  const pc = new RTCPeerConnection(servers);
+  
+  pc.onicecandidate = e => {
+    if (e.candidate) {
+      signaling.send({ type: 'candidate', candidate: e.candidate });
+    }
+  };
+  
+  return pc;
+}
+
+function start() {
+  isInitiator = true;
+  localPeer = createPeerConnection();
+  remotePeer = createPeerConnection();
+  
+  localPeer.addStream(localStream);
+  remotePeer.ontrack = e => remoteVideo.srcObject = e.streams[0];
+}
+
+function call() {
+  localPeer.createOffer()
+    .then(desc => localPeer.setLocalDescription(desc))
+    .then(() => signaling.send({ type: 'offer', description: localPeer.localDescription }))
+    .then(() => remotePeer.setRemoteDescription(localPeer.localDescription))
+    .then(() => remotePeer.createAnswer())
+    .then(desc => remotePeer.setLocalDescription(desc))
+    .then(() => signaling.send({ type: 'answer', description: remotePeer.localDescription }));
+}
+
+function hangup() {
+  localPeer.close();
+  remotePeer.close();
+}
 ```
 
-### Debug Tools:
-- **Chrome:** `chrome://webrtc-internals` - Full diagnostic page
-- **WebRTC Troubleshooter:** `test.webrtc.org` - Environment checks
+**Signaling message types:**
+- **offer** — Initial connection request (SDP metadata)
+- **answer** — Response to offer (SDP metadata)
+- **candidate** — ICE candidate updates (network info)
+
+### 3. **Session Description Protocol (SDP)**
+
+Metadata exchange format describing media capabilities:
+- Video/audio codecs supported
+- Resolution and frame rate
+- ICE candidates (network endpoints)
+- Encryption keys (DTLS)
 
 ---
 
-## Key Takeaways for EventVikings
+## Key WebRTC Concepts
 
-1. **WebRTC enables browser-based dialer** - No app installation, cross-platform
-2. **Signaling server required** - WebSocket or similar for SDP/ICE exchange
-3. **TURN server for reliability** - Fallback when direct P2P fails
-4. **Works alongside SIP** - Not replacement, complementary technology
-5. **Screen sharing capability** - Training, monitoring, compliance
-6. **Built-in encryption** - DTLS + SRTP, no additional config needed
-7. **adapter.js for compatibility** - Normalize browser differences
+### **ICE (Interactive Connectivity Establishment)**
+Framework for NAT traversal. Discovers best network path between peers.
 
----
+### **STUN (Session Traversal Utilities for NAT)**
+Servers that tell peers their public IP/port. Free, publicly available.
+- **Google's STUN:** `stun:stun.l.google.com:19302`
 
-## Common Pitfalls
+### **TURN (Traversal Using Relays around NAT)**
+Relay servers when direct connection fails. Requires authentication.
+- Essential for strict NAT/firewall configurations
+- Can be costly at scale — use STUN first, TURN as fallback
 
-1. **Forgetting HTTPS** - WebRTC requires secure context
-2. **No signaling server** - Can't establish connections without it
-3. **TURN credentials missing** - Fails on strict NATs/firewalls
-4. **Browser permission denied** - Must request getUserMedia explicitly
-5. **Using old APIs** - Stick to Promise-based APIs, use adapter.js
+### **DTLS (Datagram Transport Layer Security)**
+Encryption layer for all WebRTC traffic. Mandatory — no unencrypted connections.
 
----
-
-## Next Steps
-
-- **Proficiency:** aware (foundation established)
-- **Next level:** basic - implement hands-on with signaling server
-- **Prerequisites:** adapter.js integration, WebSocket server setup
-- **Mission impact:** HIGH - browser-based agent interface, training tools
+### **SCTP (Stream Control Transmission Protocol)**
+Transport protocol underlying RTCDataChannel. Provides:
+- Reliability and ordering guarantees
+- Multi-streaming (multiple data channels)
+- No head-of-line blocking
 
 ---
 
-## References
+## Browser Support & Compatibility
 
-- **MDN Web Docs** - WebRTC API reference
-- **Google Codelabs** - Complete WebRTC implementation guide
-- **WebRTC.org** - Official WebRTC project documentation
-- **adapter.js** - Cross-browser compatibility library
+### **Supported Browsers (2026):**
+- ✅ Chrome (full support)
+- ✅ Firefox (full support)
+- ✅ Safari (full support on macOS/iOS)
+- ✅ Edge (Chromium-based, full support)
+- ✅ Opera (full support)
+
+### **adapter.js Shim**
+Essential for cross-browser compatibility. Abstracts API differences.
+
+```html
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+```
+
+**Why use adapter.js:**
+- Browser prefixes differ historically (`webkitRTCPeerConnection` vs `RTCPeerConnection`)
+- Promise-based APIs standardized later
+- Future-proofs your code for spec changes
+- Recommended by WebRTC organization
+
+### **Mobile Considerations:**
+- iOS Safari supports WebRTC but has battery optimization quirks
+- Some mobile networks may restrict TURN usage
+- Test on actual devices, not just emulators
 
 ---
 
-## Status
+## EventVikings Use Cases
 
-- **Proficiency:** aware (updated 2026-03-22)
-- **Knowledge File:** Created `memory/knowledge/webrtc.md`
-- **Context:** Complements SIP Protocol knowledge for EventVikings predictive dialer
-- **Next:** Hands-on implementation with signaling server setup
+### **1. Predictive Dialer Agent Interface**
+WebRTC enables real-time voice streaming directly in browser agents.
+
+**Architecture:**
+```
+Predictive Dialer (FreeSWITCH)
+       │
+       │ WebRTC audio stream
+       ▼
+Browser Agent Interface
+   ├─ RTCPeerConnection (voice)
+   ├─ RTCDataChannel (call metadata)
+   └─ getUserMedia (audio I/O)
+```
+
+**Benefits:**
+- No plugin required — pure browser
+- Low latency (<200ms RTT)
+- Encryption built-in
+- Scalable — browsers handle client load
+
+### **2. Real-time Call Controls**
+DTMF support for touch-tone dialing in legacy telecom systems.
+
+```javascript
+const dtmfSender = pc.getSenders()[0].getDTMFSender();
+dtmfSender.insertDTMF('1234'); // Send DTMF tones
+```
+
+### **3. Agent Monitoring/Recording**
+Data channels can transmit call metrics for monitoring dashboards.
+
+```javascript
+const metricsChannel = pc.createDataChannel('metrics');
+metricsChannel.onopen = () => {
+  setInterval(() => {
+    metricsChannel.send(JSON.stringify({
+      latency: getLatency(),
+      jitter: getJitter(),
+      packetLoss: getPacketLoss()
+    }));
+  }, 1000);
+};
+```
+
+---
+
+## Best Practices
+
+### **1. Use adapter.js**
+Never skip this — ensures compatibility across all browsers and future API changes.
+
+### **2. Handle Permissions Gracefully**
+```javascript
+navigator.mediaDevices.getUserMedia(constraints)
+  .then(stream => startStream(stream))
+  .catch(error => {
+    if (error.name === 'NotAllowedError') {
+      // User denied permission
+      showPermissionDeniedUI();
+    } else if (error.name === 'NotFoundError') {
+      // No devices found
+      showNoDeviceUI();
+    } else {
+      showError('Access failed:', error);
+    }
+  });
+```
+
+### **3. Secure Your Signaling Channel**
+WebRTC encrypts media but NOT signaling. Use WebSocket over WSS, HTTPS, or your own encryption.
+
+### **4. Provide Fallback Strategies**
+```javascript
+const iceServers = [
+  { urls: 'stun:stun.l.google.com:19302' },
+  { 
+    urls: 'turn:your-turn-server.com:3478',
+    username: 'user',
+    credential: 'password'
+  }
+];
+
+const pc = new RTCPeerConnection({ iceServers });
+```
+
+### **5. Monitor Connection Health**
+```javascript
+pc.getStats()
+  .then(stats => {
+    stats.forEach(report => {
+      if (report.type === 'inbound-rtp') {
+        console.log('Packet loss:', report.packetsLost);
+        console.log('Bytes received:', report.bytesReceived);
+      }
+    });
+  });
+```
+
+### **6. Use chrome://webrtc-internals**
+Chrome debugging tool for inspecting WebRTC connections in production.
+- Type `chrome://webrtc-internals` in Chrome address bar
+- Select active peer connection
+- View detailed stats, packets, codec info
+
+---
+
+## Common Patterns & Code Snippets
+
+### **Full Peer Setup (Offerer/Answerer)**
+
+```javascript
+class WebRTCPeer {
+  constructor(remoteVideoId, localVideoId) {
+    this.localStream = null;
+    this.localPeer = null;
+    this.remotePeer = null;
+    this.video = document.getElementById(localVideoId);
+    this.remoteVideo = document.getElementById(remoteVideoId);
+  }
+
+  async start() {
+    // Get local media
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+    });
+    this.localStream = stream;
+    this.video.srcObject = stream;
+
+    // Create peers
+    this.localPeer = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+    this.remotePeer = new RTCPeerConnection({
+      iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+    });
+
+    // Add local stream to local peer
+    this.localPeer.addStream(stream);
+
+    // Handle remote tracks
+    this.remotePeer.ontrack = e => {
+      this.remoteVideo.srcObject = e.streams[0];
+    };
+
+    // ICE candidates
+    this.localPeer.onicecandidate = e => {
+      if (e.candidate) {
+        this.remotePeer.addIceCandidate(e.candidate);
+      }
+    };
+    this.remotePeer.onicecandidate = e => {
+      if (e.candidate) {
+        this.localPeer.addIceCandidate(e.candidate);
+      }
+    };
+
+    // Create offer
+    const offer = await this.localPeer.createOffer();
+    await this.localPeer.setLocalDescription(offer);
+    await this.remotePeer.setRemoteDescription(offer);
+
+    const answer = await this.remotePeer.createAnswer();
+    await this.remotePeer.setLocalDescription(answer);
+    await this.localPeer.setRemoteDescription(answer);
+
+    console.log('WebRTC connection established');
+  }
+
+  hangup() {
+    this.localPeer.close();
+    this.remotePeer.close();
+    this.video.srcObject.getTracks().forEach(track => track.stop());
+  }
+}
+```
+
+---
+
+## Resources
+
+### **Official Documentation:**
+- [MDN WebRTC API](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
+- [webrtc.org](https://webrtc.org) — WebRTC organization official site
+- [WebRTC Samples](https://webrtc.github.io/samples/) — GitHub demo repository
+- [AppRTC](https://appr.tc) — Canonical WebRTC chat app (Google)
+
+### **Tutorials:**
+- [Google Codelabs: Real-time communication with WebRTC](https://codelabs.developers.google.com/codelabs/webrtc-web/) — Complete hands-on tutorial
+- [HTML5 Rocks: WebRTC tutorials](http://www.html5rocks.com/en/tutorials/webrtc/) — Legacy but valuable
+
+### **Tools:**
+- [adapter.js](https://github.com/webrtc/adapter) — Cross-browser shim
+- [test.webrtc.org](https://test.webrtc.org/) — Local environment testing
+- `chrome://webrtc-internals` — Production debugging (Chrome only)
+
+---
+
+## Next Steps for EventVikings
+
+### **Phase 1: Basic Voice Integration**
+Implement `getUserMedia()` and `RTCPeerConnection` to establish voice stream from FreeSWITCH predictive dialer to browser agent interface.
+
+### **Phase 2: Data Channel Integration**
+Use RTCDataChannel for:
+- Call metadata exchange (caller ID, queue position)
+- Real-time agent state updates (available, busy, break)
+- Agent performance metrics streaming
+
+### **Phase 3: Advanced Features**
+- Screen sharing for supervisor monitoring
+- Recording support (client-side or server-side)
+- DTMF support for legacy PSTN integration
+- WebRTC-encoded transforms for custom audio processing
+
+### **Recommended Libraries:**
+- **PeerJS** — Simplifies peer connection setup
+- **SignalR** — WebSocket signaling framework
+- **Socket.io** — JavaScript real-time framework
+
+---
+
+**Status:** Research complete. Proficiency upgraded from `aware` to `basic` (ready to implement simple WebRTC audio/video features).
