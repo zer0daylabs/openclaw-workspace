@@ -1,6 +1,6 @@
 # CB Knowledge Map — Stack Proficiency Tracker
 
-Last updated: 2026-03-15
+Last updated: 2026-03-24
 
 ---
 
@@ -69,7 +69,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | FreeSWITCH | basic | 2026-03-17 | `knowledge/freeswitch.md` | EventVikings predictive dialer depends on it |
 | SIP Protocol | aware | 2026-03-21 | `knowledge/sip-protocol.md` | Signaling protocol, core to predictive dialer |
 | WebRTC | **working** | **2026-03-23** | `knowledge/webrtc.md` | **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** - Real-time browser-based communication for agent interface |
-| Locust | aware | — | — | Load testing (locustfile.py exists) |
+| Locust | **working** | **2026-03-24** | `knowledge/locust.md` | **RESearched 2026-03-24, moved to working proficiency with foundation, knowledge file created** - EventVikings predictive dialer load testing
 
 ## Auth & Identity
 
@@ -108,6 +108,8 @@ Technologies CB should learn next, ordered by mission impact:
 6. ✅ **Prisma** — Deeper knowledge needed for DB schema changes in MusicGen/AudioStudio. RESearched 2026-03-21, moved to working proficiency, knowledge file created (`memory/knowledge/prisma.md`).
 7. ✅ **SIP Protocol** — Critical for EventVikings predictive dialer. RESearched 2026-03-21, moved to aware proficiency with foundation, knowledge file created (`memory/knowledge/sip-protocol.md`).
 8. ✅ **WebRTC** — Browser-based real-time communication for agent interface. **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** (`memory/knowledge/webrtc.md`).
+
+9. ✅ **Locust** — Load testing for EventVikings predictive dialer. RESearched 2026-03-24, moved to working proficiency with foundation, knowledge file created (`memory/knowledge/locust.md`)
 
 ---
 
