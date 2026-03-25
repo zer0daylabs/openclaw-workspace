@@ -1,15 +1,15 @@
 {
-  "heartbeatCounter": 99,
-  "lastHeartbeat": "2026-03-24T18:47:38Z",
+  "heartbeatCounter": 105,
+  "lastHeartbeat": "2026-03-25T00:48:21Z",
   "cadences": {
     "resourceCheck": {
       "every": 3,
-      "lastRun": 96,
+      "lastRun": 102,
       "description": "Check Ollama VRAM, session tokens"
     },
     "learningSession": {
       "every": 6,
-      "lastRun": 93,
+      "lastRun": 99,
       "description": "Research a knowledge gap from KNOWLEDGE-MAP.md"
     },
     "performanceReview": {
@@ -19,7 +19,7 @@
     },
     "gitCommit": {
       "every": 6,
-      "lastRun": 93,
+      "lastRun": 99,
       "description": "Commit workspace changes to git"
     }
   },
