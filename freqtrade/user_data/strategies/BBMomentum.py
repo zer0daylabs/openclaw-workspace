@@ -46,6 +46,7 @@ class BBMomentum(IStrategy):
 
     # --- Risk management ---
     stoploss = -0.03
+    use_custom_stoploss = True
     trailing_stop = True
     trailing_stop_positive = 0.01
     trailing_stop_positive_offset = 0.015
@@ -62,9 +63,6 @@ class BBMomentum(IStrategy):
     # --- Hyperopt: exit parameters ---
     sell_profit_protect = DecimalParameter(default=0.005, low=0.002, high=0.012, decimals=3, space='sell')
     sell_profit_protect_min_minutes = IntParameter(default=10, low=5, high=45, space='sell')
-    sell_early_loss_minutes = IntParameter(default=30, low=15, high=60, space='sell')
-    sell_early_loss_threshold = DecimalParameter(default=-0.003, low=-0.008, high=-0.001, decimals=3, space='sell')
-    sell_force_exit_hours = IntParameter(default=2, low=1, high=6, space='sell')
 
     def informative_pairs(self):
         pairs = self.dp.current_whitelist()
@@ -160,6 +158,25 @@ class BBMomentum(IStrategy):
         dataframe.loc[vol_signal, ['enter_long', 'enter_tag']] = (1, 'vol_spike')
 
         return dataframe
+
+    def custom_stoploss(self, pair: str, trade: Trade, current_time: datetime,
+                        current_rate: float, current_profit: float,
+                        after_fill: bool, **kwargs) -> float:
+        trade_minutes = (current_time - trade.open_date_utc).total_seconds() / 60
+
+        # Phase 1: Breakeven lock — once trade reached +0.5%, stop at breakeven
+        if current_profit >= 0.005:
+            return -0.001
+
+        # Phase 2: Time-based tightening — push out lingering losers
+        if trade_minutes < 30:
+            return -0.03      # Full room for first 30 min
+        elif trade_minutes < 60:
+            return -0.025     # Tighten after 30 min
+        elif trade_minutes < 120:
+            return -0.02      # Tighten after 1h
+        else:
+            return -0.015     # Tight after 2h — no more -3.9% disasters
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime,
                     current_rate: float, current_profit: float, **kwargs):
