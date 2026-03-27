@@ -1,6 +1,6 @@
 # CB Knowledge Map — Stack Proficiency Tracker
 
-Last updated: 2026-03-24
+Last updated: 2026-03-26
 
 ---
 
@@ -41,7 +41,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | Railway | basic | — | — | Database hosting, project management |
 | Docker | working | — | — | Freqtrade, Graphiti, Neo4j containers |
 | Neo4j | basic | — | — | Graph database for Graphiti |
-| Nginx | aware | — | — | May need for reverse proxy setups |
+| Nginx | basic | 2026-03-26 | `knowledge/nginx.md` | Reverse proxy, SSL, static file serving |
 | Linux (Ubuntu) | working | — | — | Host OS |
 
 ## Agent System
