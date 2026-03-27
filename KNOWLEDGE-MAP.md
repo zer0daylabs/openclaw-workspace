@@ -1,6 +1,6 @@
 # CB Knowledge Map — Stack Proficiency Tracker
 
-Last updated: 2026-03-26
+Last updated: 2026-03-27
 
 ---
 
@@ -67,7 +67,7 @@ This file tracks every technology in the Zer0Day Labs stack and CB's proficiency
 | Technology | Proficiency | Last Studied | Knowledge File | Notes |
 |-----------|------------|-------------|---------------|-------|
 | FreeSWITCH | basic | 2026-03-17 | `knowledge/freeswitch.md` | EventVikings predictive dialer depends on it |
-| SIP Protocol | aware | 2026-03-21 | `knowledge/sip-protocol.md` | Signaling protocol, core to predictive dialer |
+| SIP Protocol | basic | 2026-03-27 | `knowledge/sip-protocol.md` | Signaling protocol, core to predictive dialer |
 | WebRTC | **working** | **2026-03-23** | `knowledge/webrtc.md` | **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** - Real-time browser-based communication for agent interface |
 | Locust | **working** | **2026-03-24** | `knowledge/locust.md` | **RESearched 2026-03-24, moved to working proficiency with foundation, knowledge file created** - EventVikings predictive dialer load testing
 
@@ -110,6 +110,8 @@ Technologies CB should learn next, ordered by mission impact:
 8. ✅ **WebRTC** — Browser-based real-time communication for agent interface. **RESearched 2026-03-23, moved to working proficiency with foundation, knowledge file created** (`memory/knowledge/webrtc.md`).
 
 9. ✅ **Locust** — Load testing for EventVikings predictive dialer. RESearched 2026-03-24, moved to working proficiency with foundation, knowledge file created (`memory/knowledge/locust.md`)
+
+10. ✅ **SIP Protocol** — Critical signaling protocol for EventVikings predictive dialer. RESearched 2026-03-27, moved to basic proficiency with foundation, knowledge file expanded (`memory/knowledge/sip-protocol.md`). Ready for FreeSWITCH integration tasks.
 
 ---
 

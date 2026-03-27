@@ -9,7 +9,7 @@ Entry signals:
   2. bb_squeeze: Bollinger Band width contracts then price breaks upward — breakout
   3. volume_spike: Abnormal volume with bullish candle + favorable RSI — momentum
 
-Exits: Tiered ROI + trailing stop + custom (profit protect, force exit)
+Exits: Tiered ROI + unified custom_stoploss (time-decay, breakeven, trailing) + custom exit (profit protect)
 No exit_signal (proven loser in previous strategies).
 
 Designed for: Kraken, 5m, USDT pairs, $50 stakes, limit orders
@@ -47,10 +47,7 @@ class BBMomentum(IStrategy):
     # --- Risk management ---
     stoploss = -0.03
     use_custom_stoploss = True
-    trailing_stop = True
-    trailing_stop_positive = 0.01
-    trailing_stop_positive_offset = 0.015
-    trailing_only_offset_is_reached = True
+    trailing_stop = False
 
     # --- Hyperopt: entry parameters ---
     buy_bb_rsi_max = IntParameter(default=35, low=25, high=55, space='buy')
@@ -164,11 +161,16 @@ class BBMomentum(IStrategy):
                         after_fill: bool, **kwargs) -> float:
         trade_minutes = (current_time - trade.open_date_utc).total_seconds() / 60
 
-        # Phase 1: Breakeven lock — once trade reached +0.5%, stop at breakeven
+        # Phase 1: Trailing — once profit >= 1.5%, trail 1% below peak
+        # Returns -0.01 which Freqtrade ratchets (only tightens, never loosens)
+        if current_profit >= 0.015:
+            return -0.01
+
+        # Phase 2: Breakeven lock — once profit >= 0.5%, stop at breakeven
         if current_profit >= 0.005:
             return -0.001
 
-        # Phase 2: Time-based tightening — push out lingering losers
+        # Phase 3: Time-based tightening — push out lingering losers
         if trade_minutes < 30:
             return -0.03      # Full room for first 30 min
         elif trade_minutes < 60:
