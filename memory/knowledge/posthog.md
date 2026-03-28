@@ -1,8 +1,44 @@
 # PostHog — CB Knowledge Summary
 
-Last updated: 2026-03-18
-Proficiency: basic
+Last updated: 2026-03-28
+Proficiency: working (updated 2026-03-28 - implemented pricing analytics)
 Domain: Product analytics, A/B testing, feature flags
+
+---
+
+## Implementation Status (2026-03-28)
+
+### ✅ Implemented for MusicGen
+1. **PostHog instrumentation** (`src/instrumentation.ts`)
+   - Server-side SDK setup
+   - Capture wrapper function
+2. **Pricing analytics** (`src/lib/pricing-analytics.ts`)
+   - Page view tracking
+   - CTA click tracking
+   - Conversion funnel tracking
+   - Free tier limit tracking
+   - Feature interest tracking (Projects, Sets, API, Custom sample packs)
+
+### 📊 Events Tracked
+- `pricing_page_view` - User visits pricing page with tier interest
+- `pricing_cta_click` - User clicks upgrade button
+- `pricing_upgrade_intent` - User considers upgrade
+- `pricing_annual_toggle` - User switches billing cycle
+- `pricing_comparison_table_view` - User views comparison table
+- `pricing_faq_view` - User views FAQ topic
+- `free_generation_limit_reached` - Free user hits 50 gen limit
+- `first_project_created` - Tutorial trigger
+- `sets_feature_interest` - Pro+ upgrade trigger
+- `checkout_started/completed` - Conversion funnel
+
+### 🎯 Next Steps
+1. Install `posthog-js` in MusicGen dependencies
+2. Add PostHog credentials to `.env` (NEXT_PUBLIC_POSTHOG_KEY, POSTHOG_API_KEY)
+3. Configure reverse proxy for heatmaps
+4. Create pricing A/B test flag in PostHog
+5. Connect Stripe events to user IDs
+6. Monitor for 1 week, analyze results
+
 
 ---
 
