@@ -1,10 +1,10 @@
 {
-  "heartbeatCounter": 167,
-  "lastHeartbeat": "2026-03-29T17:19:23Z",
+  "heartbeatCounter": 173,
+  "lastHeartbeat": "2026-03-29T23:19:00Z",
   "cadences": {
     "resourceCheck": {
       "every": 3,
-      "lastRun": 166,
+      "lastRun": 172,
       "description": "Check Ollama VRAM, session tokens"
     },
     "learningSession": {
