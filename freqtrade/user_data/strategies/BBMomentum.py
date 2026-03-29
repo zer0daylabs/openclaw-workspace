@@ -45,7 +45,7 @@ class BBMomentum(IStrategy):
     }
 
     # --- Risk management ---
-    stoploss = -0.03
+    stoploss = -0.02
     use_custom_stoploss = True
     trailing_stop = False
 
@@ -171,14 +171,16 @@ class BBMomentum(IStrategy):
             return -0.001
 
         # Phase 3: Time-based tightening — push out lingering losers
-        if trade_minutes < 30:
-            return -0.03      # Full room for first 30 min
+        if trade_minutes < 15:
+            return -0.02      # Full room for first 15 min
+        elif trade_minutes < 30:
+            return -0.0175    # Tighten after 15 min
         elif trade_minutes < 60:
-            return -0.025     # Tighten after 30 min
+            return -0.015     # Tighten after 30 min
         elif trade_minutes < 120:
-            return -0.02      # Tighten after 1h
+            return -0.0125    # Tighten after 1h
         else:
-            return -0.015     # Tight after 2h — no more -3.9% disasters
+            return -0.01      # Tight after 2h — force out lingering losers
 
     def custom_exit(self, pair: str, trade: Trade, current_time: datetime,
                     current_rate: float, current_profit: float, **kwargs):
