@@ -1,6 +1,6 @@
-**Heartbeat #:** 214  
-**Timestamp:** 2026-04-05T20:54Z  
-**Session type:** Daytime heartbeat (1:54 PM MST)
+**Heartbeat #:** 220  
+**Timestamp:** 2026-04-06T02:53Z  
+**Session type:** Evening heartbeat (7:53 PM MST)
 
 ## What I Worked On
 
@@ -10,27 +10,43 @@
 
 ### 🧠 Learning Session (Due)
 - Reviewed KNOWLEDGE-MAP.md for knowledge gaps
-- **Finding:** No critical knowledge gaps
-  - All technologies at **basic** proficiency or higher
-  - Priority queue complete: FreeSWITCH, Sentry, PostHog, Hyperopt, Microsoft 365, Prisma, SIP Protocol, WebRTC, Locust - all researched
-  - 5 technologies moved to **working** proficiency (Prisma, WebRTC, Locust, etc.)
+- **Finding:** No critical knowledge gaps - all technologies at basic proficiency or higher
+- Priority research queue complete (FreeSWITCH, Sentry, PostHog, Hyperopt, MS 365, Prisma, SIP Protocol, WebRTC, Locust all researched)
 - Status: ✅ COMPLETE - no research task needed
+
+### 🗂️ Session Token Reduction (CRITICAL)
+- **Action:** Archived old memory files from March 2026
+- **Archived:** 14 files (2026-03-02 through 2026-03-18) to `memory/archived/2026-03/`
+- **Deleted:** 13 original March files to reduce token count
+- **Goal:** Reduce main session from ~97k tokens toward 80k threshold
+- Status: ✅ COMPLETE - archiving initiated
+
+### ⚡ Freqtrade Status
+- **Status:** ACTIVE with 4 trades open
+- **Total stakes:** $200 deployed in dry run
+- **Positions:**
+  - BCH/USDT - $50 stake, -0.65% (bb_squeeze, older)
+  - DOT/USDT - $50 stake, -0.67% (bb_squeeze, newer)
+  - LINK/USDT - $50 stake, -0.51% (bb_squeeze, opened 02:44)
+  - ATOM/USDT - $50 stake, -1.10% (bb_squeeze, opened 02:36)
+- All trades within stop-loss, early stage
 
 ### 📊 System Health
 - **Ollama:** OPERATIONAL ✅ (qwen3.5:35b, nomic-embed-text, 10 models total)
 - **Graphiti:** OPERATIONAL ✅ (Search API working, Neo4j connected)
 - **Neo4j:** OPERATIONAL ✅ (Container healthy, Bolt port accessible)
-- **Freqtrade:** OPERATIONAL ✅ (API responding)
+- **Freqtrade:** ACTIVE ✅ (4 trades, BBMomentum strategy)
 
 ## Tasks
 - No pending tasks in todo-management
 - All systems operational
-- Knowledge base current - no new research needed
+- Session token reduction initiated
 
 ## Notes
-- Clean heartbeat - all protocols executed
-- Learning session complete with no new tasks generated (knowledge gaps addressed)
-- All technologies in Zer0Day stack have been researched and documented
+- Archiving March files should reduce token count by ~10-15k tokens
+- Main session may need follow-up pruning if bloat continues
+- Freqtrade actively trading on BBMomentum with multiple signals
+- Learning session complete - all knowledge gaps addressed
 
 ---
-_Edited at 2026-04-05T20:54Z - Heartbeat #214 complete. Learning session done, no knowledge gaps found._
+_Edited at 2026-04-06T02:53Z - Heartbeat #220 complete. Learning session done, 13 March files archived to reduce tokens._
